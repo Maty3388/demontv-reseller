@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:better_player/better_player.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
+
 import '../models/models.dart';
 import '../theme/app_theme.dart';
 
@@ -18,7 +18,7 @@ class _State extends State<PlayerScreen> {
   Timer? _hideTimer;
 
   @override
-  void initState() { super.initState(); WakelockPlus.enable(); _initPlayer(widget.channel); _startHideTimer(); }
+  void initState() { super.initState();  _initPlayer(widget.channel); _startHideTimer(); }
 
   void _initPlayer(Channel channel) {
     final parts = channel.streamUrl.split('|');
@@ -54,7 +54,7 @@ class _State extends State<PlayerScreen> {
   void _toggleFullscreen() { SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]); SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky); }
 
   @override
-  void dispose() { _hideTimer?.cancel(); _ctrl?.dispose(); WakelockPlus.disable(); SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge); super.dispose(); }
+  void dispose() { _hideTimer?.cancel(); _ctrl?.dispose();  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge); super.dispose(); }
 
   @override
   Widget build(BuildContext context) => Scaffold(backgroundColor: Colors.black,

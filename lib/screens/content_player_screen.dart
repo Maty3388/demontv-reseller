@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:better_player/better_player.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/models.dart';
 import '../theme/app_theme.dart';
@@ -21,7 +21,7 @@ class _State extends State<ContentPlayerScreen> {
   bool get hasStream => widget.content.streamUrl != null && widget.content.streamUrl!.isNotEmpty;
 
   @override
-  void initState() { super.initState(); if (hasStream) { WakelockPlus.enable(); _initPlayer(); } }
+  void initState() { super.initState(); if (hasStream) {  _initPlayer(); } }
 
   void _initPlayer() {
     final rawUrl = widget.content.streamUrl!;
@@ -48,7 +48,7 @@ class _State extends State<ContentPlayerScreen> {
   void _skip(int s) { final p = _ctrl?.videoPlayerController?.value.position ?? Duration.zero; _ctrl?.seekTo(p + Duration(seconds: s)); _startHideTimer(); }
 
   @override
-  void dispose() { _hideTimer?.cancel(); _ctrl?.dispose(); WakelockPlus.disable(); SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); super.dispose(); }
+  void dispose() { _hideTimer?.cancel(); _ctrl?.dispose();  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); super.dispose(); }
 
   @override
   Widget build(BuildContext context) => Scaffold(backgroundColor: Colors.black,
