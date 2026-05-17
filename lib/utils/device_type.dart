@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 enum DeviceType { phone, tv }
 
 DeviceType getDeviceType(BuildContext context) {
   final size = MediaQuery.of(context).size;
-  final isLandscape = size.width > size.height;
-  final isLargeScreen = size.shortestSide > 600;
-  if (isLandscape && isLargeScreen) return DeviceType.tv;
+  final width = size.width;
+  // TV Box generalmente tiene 960dp+ de ancho
+  if (width >= 800) return DeviceType.tv;
   return DeviceType.phone;
 }
 
