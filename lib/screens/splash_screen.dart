@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../services/update_checker.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,8 +17,12 @@ class _State extends State<SplashScreen> with SingleTickerProviderStateMixin {
     _ctrl = AnimationController(vsync: this, duration: const Duration(milliseconds: 1200));
     _fade = CurvedAnimation(parent: _ctrl, curve: Curves.easeIn);
     _ctrl.forward();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) Navigator.pushReplacementNamed(context, '/login');
+    Future.delayed(const Duration(seconds: 3), () async {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+        await Future.delayed(const Duration(milliseconds: 500));
+        if (mounted) UpdateChecker.check(context);
+      }
     });
   }
 
