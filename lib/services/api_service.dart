@@ -13,6 +13,10 @@ class ApiService {
 
   static void setToken(String token) => _token = token;
   static void clearToken() => _token = null;
+  
+  static String getProxyUrl(String channelId) {
+    return "https://149.104.92.205/proxy/stream?id=$channelId";
+  }
   static bool get isLoggedIn => _token != null;
 
   static Future<Map<String, dynamic>> login(String email, String password) async {
