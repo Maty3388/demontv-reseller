@@ -39,59 +39,80 @@ class _State extends State<LoginScreen> {
     return _buildPhone();
   }
 
-  // ── Layout TV ─────────────────────────────────────────────
   Widget _buildTV() => Scaffold(
-    backgroundColor: Colors.black,
+    backgroundColor: const Color(0xFF0D0D0D),
     body: Row(children: [
-      // Panel izquierdo
-      Expanded(flex: 2, child: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(colors: AppTheme.logoGradient, begin: Alignment.topLeft, end: Alignment.bottomRight)),
+      // Panel izquierdo - Logo
+      Expanded(flex: 4, child: Container(
+        color: const Color(0xFF0D0D0D),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Container(width: 120, height: 120,
-            decoration: BoxDecoration(color: Colors.white.withOpacity(0.15), borderRadius: BorderRadius.circular(30)),
-            child: const Center(child: Text('∞', style: TextStyle(color: Colors.white, fontSize: 72, fontWeight: FontWeight.bold)))),
+          Container(width: 130, height: 130,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(colors: AppTheme.logoGradient, begin: Alignment.topLeft, end: Alignment.bottomRight),
+              borderRadius: BorderRadius.circular(32)),
+            child: const Center(child: Text('∞', style: TextStyle(color: Colors.white, fontSize: 80, fontWeight: FontWeight.bold)))),
           const SizedBox(height: 24),
-          const Text('DemonTv Plus', style: TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold, letterSpacing: 2)),
-          const SizedBox(height: 8),
-          const Text('Tu entretenimiento sin límites', style: TextStyle(color: Colors.white70, fontSize: 16)),
+          const Text('Bienvenido a', style: TextStyle(color: Colors.white70, fontSize: 18)),
+          const SizedBox(height: 6),
+          const Text('DemonTv Plus', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
         ]),
       )),
-      // Panel derecho - Login
-      Expanded(flex: 3, child: Container(
-        color: const Color(0xFF0A0A0A),
-        padding: const EdgeInsets.all(60),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const Text('Iniciar Sesión', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          const Text('Ingresá tus credenciales para continuar', style: TextStyle(color: AppTheme.textSecondary, fontSize: 16)),
-          const SizedBox(height: 40),
-          _TVField(controller: _email, hint: 'Correo electrónico', icon: Icons.email_outlined, autofocus: true),
+      // Separador vertical
+      Container(width: 1, height: double.infinity, color: Colors.white12),
+      // Panel derecho - Formulario
+      Expanded(flex: 6, child: Container(
+        color: const Color(0xFF0D0D0D),
+        padding: const EdgeInsets.symmetric(horizontal: 80),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          // Campo email
+          Container(
+            decoration: BoxDecoration(color: const Color(0xFF1E1E1E), borderRadius: BorderRadius.circular(12)),
+            child: TextField(
+              controller: _email, autofocus: true,
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Icons.email_outlined, color: Colors.white54, size: 22),
+                hintText: 'Correo electrónico',
+                hintStyle: TextStyle(color: Colors.white38),
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 18)))),
           const SizedBox(height: 16),
-          _TVField(controller: _pass, hint: 'Contraseña', icon: Icons.lock_outline, obscure: !_showPass,
-            suffix: IconButton(icon: Icon(_showPass ? Icons.visibility_off : Icons.visibility, color: AppTheme.textSecondary),
-              onPressed: () => setState(() => _showPass = !_showPass))),
+          // Campo contraseña
+          Container(
+            decoration: BoxDecoration(color: const Color(0xFF1E1E1E), borderRadius: BorderRadius.circular(12)),
+            child: TextField(
+              controller: _pass, obscureText: !_showPass,
+              style: const TextStyle(color: Colors.white, fontSize: 18),
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.lock_outline, color: Colors.white54, size: 22),
+                suffixIcon: IconButton(icon: Icon(_showPass ? Icons.visibility_off : Icons.visibility, color: Colors.white38, size: 20), onPressed: () => setState(() => _showPass = !_showPass)),
+                hintText: 'Contraseña',
+                hintStyle: const TextStyle(color: Colors.white38),
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18)))),
           if (_error != null) ...[
-            const SizedBox(height: 16),
-            Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: AppTheme.accentRed.withOpacity(0.15), borderRadius: BorderRadius.circular(8)),
-              child: Row(children: [const Icon(Icons.error_outline, color: AppTheme.accentRed, size: 18), const SizedBox(width: 8), Text(_error!, style: const TextStyle(color: AppTheme.accentRed, fontSize: 14))])),
+            const SizedBox(height: 12),
+            Text(_error!, style: const TextStyle(color: AppTheme.accentRed, fontSize: 14), textAlign: TextAlign.center),
           ],
-          const SizedBox(height: 32),
-          SizedBox(width: double.infinity, height: 56,
-            child: ElevatedButton(
-              onPressed: _loading ? null : _login,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppTheme.accentCyan,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
-              child: _loading
+          const SizedBox(height: 8),
+          Align(alignment: Alignment.centerRight,
+            child: Text('¿Olvidaste tu contraseña?', style: TextStyle(color: AppTheme.accentCyan.withOpacity(0.8), fontSize: 13))),
+          const SizedBox(height: 28),
+          // Botón
+          GestureDetector(
+            onTap: _loading ? null : _login,
+            child: Container(height: 56,
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(colors: [Color(0xFF00E5FF), Color(0xFFAA00FF)], begin: Alignment.centerLeft, end: Alignment.centerRight),
+                borderRadius: BorderRadius.circular(28)),
+              child: Center(child: _loading
                 ? const CircularProgressIndicator(color: Colors.black, strokeWidth: 2.5)
-                : const Text('INICIAR SESIÓN', style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold, letterSpacing: 1.5)))),
+                : const Text('Iniciar Sesion', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold))))),
         ]),
       )),
     ]),
   );
 
-  // ── Layout Phone ──────────────────────────────────────────
   Widget _buildPhone() => Scaffold(
     backgroundColor: AppTheme.background,
     body: SafeArea(child: SingleChildScrollView(
@@ -109,59 +130,18 @@ class _State extends State<LoginScreen> {
           ]),
         ]),
         const SizedBox(height: 48),
-        _PhoneField(controller: _email, hint: 'Correo electrónico', icon: Icons.email_outlined),
+        Container(decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(14)),
+          child: TextField(controller: _email, style: const TextStyle(color: Colors.white),
+            decoration: const InputDecoration(prefixIcon: Icon(Icons.email_outlined, color: AppTheme.textSecondary, size: 20), hintText: 'Correo electrónico', border: InputBorder.none, contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 16)))),
         const SizedBox(height: 14),
-        _PhoneField(controller: _pass, hint: 'Contraseña', icon: Icons.lock_outline, obscure: !_showPass,
-          suffix: IconButton(icon: Icon(_showPass ? Icons.visibility_off : Icons.visibility, color: AppTheme.textSecondary, size: 20),
-            onPressed: () => setState(() => _showPass = !_showPass))),
-        if (_error != null) ...[
-          const SizedBox(height: 12),
-          Text(_error!, style: const TextStyle(color: AppTheme.accentRed, fontSize: 13), textAlign: TextAlign.center),
-        ],
+        Container(decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(14)),
+          child: TextField(controller: _pass, obscureText: !_showPass, style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(prefixIcon: const Icon(Icons.lock_outline, color: AppTheme.textSecondary, size: 20), suffixIcon: IconButton(icon: Icon(_showPass ? Icons.visibility_off : Icons.visibility, color: AppTheme.textSecondary, size: 20), onPressed: () => setState(() => _showPass = !_showPass)), hintText: 'Contraseña', border: InputBorder.none, contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16)))),
+        if (_error != null) ...[const SizedBox(height: 12), Text(_error!, style: const TextStyle(color: AppTheme.accentRed, fontSize: 13), textAlign: TextAlign.center)],
         const SizedBox(height: 28),
         GradientButton(text: _loading ? '' : 'Iniciar Sesión', onPressed: _loading ? () {} : _login, isLoading: _loading),
         const SizedBox(height: 32),
       ]),
     )),
   );
-}
-
-class _TVField extends StatelessWidget {
-  final TextEditingController controller;
-  final String hint;
-  final IconData icon;
-  final bool obscure, autofocus;
-  final Widget? suffix;
-  const _TVField({required this.controller, required this.hint, required this.icon, this.obscure = false, this.autofocus = false, this.suffix});
-  @override Widget build(BuildContext context) => TextField(
-    controller: controller, obscureText: obscure, autofocus: autofocus,
-    style: const TextStyle(color: Colors.white, fontSize: 18),
-    decoration: InputDecoration(
-      prefixIcon: Icon(icon, color: AppTheme.textSecondary, size: 22),
-      suffixIcon: suffix,
-      hintText: hint,
-      filled: true, fillColor: const Color(0xFF1C1C1E),
-      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppTheme.accentCyan, width: 2)),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18)));
-}
-
-class _PhoneField extends StatelessWidget {
-  final TextEditingController controller;
-  final String hint;
-  final IconData icon;
-  final bool obscure;
-  final Widget? suffix;
-  const _PhoneField({required this.controller, required this.hint, required this.icon, this.obscure = false, this.suffix});
-  @override Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(color: AppTheme.surface, borderRadius: BorderRadius.circular(14)),
-    child: TextField(
-      controller: controller, obscureText: obscure,
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppTheme.textSecondary, size: 20),
-        suffixIcon: suffix,
-        hintText: hint,
-        border: InputBorder.none,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16))));
 }
