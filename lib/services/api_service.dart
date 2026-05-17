@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../models/models.dart';
 
@@ -12,7 +13,24 @@ class ApiService {
   };
 
   static void setToken(String token) => _token = token;
-  static void clearToken() => _token = null;
+  static void clearToken() async {
+    _token = null;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+  }
+
+  static Future<void> saveToken(String token) async {
+    _token = token;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
+  }
+
+  static Future<bool> loadToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    if (token != null) { _token = token; return true; }
+    return false;
+  }
   
   static String getProxyUrl(String channelId) {
     return "http://149.104.92.205:25461/proxy/stream?id=$channelId";

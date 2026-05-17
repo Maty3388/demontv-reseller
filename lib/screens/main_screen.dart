@@ -3,6 +3,7 @@ import '../theme/app_theme.dart';
 import 'live_tv_screen.dart';
 import 'vod_screen.dart';
 import 'settings_screen.dart';
+import 'profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,6 +18,7 @@ class _State extends State<MainScreen> {
     VodScreen(type: 'movies'),
     VodScreen(type: 'series'),
     SettingsScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -42,9 +44,7 @@ class _State extends State<MainScreen> {
             child: Icon(_idx == 2 ? Icons.theaters : Icons.theaters_outlined, color: Colors.black, size: 26)),
         ),
         _NavItem(icon: Icons.video_library_outlined, activeIcon: Icons.video_library, index: 3, selected: _idx, onTap: (i) => setState(() => _idx = i)),
-        _NavItem(icon: Icons.person_outline, activeIcon: Icons.person, index: 4, selected: _idx, onTap: (i) {
-          if (i == 4) setState(() => _idx = 3);
-        }),
+        _NavItem(icon: Icons.person_outline, activeIcon: Icons.person, index: 4, selected: _idx, onTap: (i) => setState(() => _idx = i)),
       ]),
     )),
   );
