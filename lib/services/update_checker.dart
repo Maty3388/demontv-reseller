@@ -4,7 +4,7 @@ import 'dart:convert';
 
 class UpdateChecker {
   static const _currentVersion = '1.0.0';
-  static const _apiUrl = 'http://149.104.92.205:25461/app/version';
+  static const _apiUrl = 'https://149.104.92.205/app/version';
 
   static Future<void> check(BuildContext context) async {
     try {

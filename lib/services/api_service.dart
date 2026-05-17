@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/models.dart';
 
 class ApiService {
-  static const String baseUrl = 'http://149.104.92.205:25461';
+  static const String baseUrl = 'https://149.104.92.205';
   static String? _token;
 
   static Map<String, String> get _headers => {
