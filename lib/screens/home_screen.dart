@@ -23,7 +23,7 @@ class _State extends State<HomeScreen> {
       final r2 = await ApiService.getMovies(featuredOnly: true);
       final r3 = await ApiService.getSeries(featuredOnly: true);
       setState(() {
-        _channels = r1.map((c) => {"name": c.name, "logo": c.logo, "id": c.id, "stream_url": c.streamUrl, "headers": c.headers, "is_live": c.isLive}).toList();
+        _channels = r1.map((c) => {"name": c.name, "logo": c.logoUrl, "id": c.id, "stream_url": c.streamUrl, "headers": c.headers, "is_live": c.isLive}).toList();
         _movies = r2.map((m) => {"title": m.title, "poster": m.posterUrl, "id": m.id, "stream_url": m.streamUrl}).toList();
         _series = r3.map((s) => {"title": s.title, "poster": s.posterUrl, "id": s.id}).toList();
         _loading  = false;
