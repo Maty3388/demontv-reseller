@@ -30,28 +30,28 @@ class AdminApi {
 
   static Future<Map<String, dynamic>> _post(String path, Map body) async {
     try {
-      final r = await http.post(Uri.parse('\$base\$path'), headers: headers, body: jsonEncode(body));
+      final r = await http.post(Uri.parse('$base$path'), headers: headers, body: jsonEncode(body));
       return jsonDecode(r.body);
     } catch(e) { return {'error': e.toString()}; }
   }
 
   static Future<Map<String, dynamic>> _get(String path) async {
     try {
-      final r = await http.get(Uri.parse('\$base\$path'), headers: headers);
+      final r = await http.get(Uri.parse('$base$path'), headers: headers);
       return jsonDecode(r.body);
     } catch(e) { return {'error': e.toString()}; }
   }
 
   static Future<Map<String, dynamic>> _put(String path, Map body) async {
     try {
-      final r = await http.put(Uri.parse('\$base\$path'), headers: headers, body: jsonEncode(body));
+      final r = await http.put(Uri.parse('$base$path'), headers: headers, body: jsonEncode(body));
       return jsonDecode(r.body);
     } catch(e) { return {'error': e.toString()}; }
   }
 
   static Future<Map<String, dynamic>> _delete(String path) async {
     try {
-      final r = await http.delete(Uri.parse('\$base\$path'), headers: headers);
+      final r = await http.delete(Uri.parse('$base$path'), headers: headers);
       return jsonDecode(r.body);
     } catch(e) { return {'error': e.toString()}; }
   }
