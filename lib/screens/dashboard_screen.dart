@@ -7,6 +7,8 @@ import 'movies_screen.dart';
 import 'series_screen.dart';
 import 'logs_screen.dart';
 import 'version_screen.dart';
+import 'logs_screen.dart';
+import 'version_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
