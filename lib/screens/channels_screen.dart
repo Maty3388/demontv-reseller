@@ -32,7 +32,7 @@ class _ChannelsState extends State<ChannelsScreen> {
         _msgOk = true;
       });
     } else {
-      setState(() { _msg = 'Error: \${r['error'] ?? r.toString()}'; _msgOk = false; });
+      setState(() { _msg = 'Error: ${r["error"] ?? r.toString()}'; _msgOk = false; });
     }
   }
 
