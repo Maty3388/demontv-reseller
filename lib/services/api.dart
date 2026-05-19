@@ -73,27 +73,27 @@ class AdminApi {
     _post('/admin/channels', {'name': name, 'category': category, 'logo': logo, 'stream_url': url});
 
   static Future<Map<String, dynamic>> updateChannel(String id, String name, String category, String logo, String url) =>
-    _put('/admin/channels/\$id', {'name': name, 'category': category, 'logo': logo, 'stream_url': url});
+    _put('/admin/channels/$id', {'name': name, 'category': category, 'logo': logo, 'stream_url': url});
 
-  static Future<Map<String, dynamic>> deleteChannel(String id) => _delete('/admin/channels/\$id');
+  static Future<Map<String, dynamic>> deleteChannel(String id) => _delete('/admin/channels/$id');
 
   static Future<Map<String, dynamic>> addClient(String email, String pass, String expiry) =>
     _post('/admin/clients', {'email': email, 'password': pass, 'subscription_end': expiry});
 
   static Future<Map<String, dynamic>> updateClient(String id, {bool? blocked, String? password, String? expiry}) =>
-    _put('/admin/clients/\$id', {if (blocked != null) 'blocked': blocked, if (password != null) 'password': password, if (expiry != null) 'subscription_end': expiry});
+    _put('/admin/clients/$id', {if (blocked != null) 'blocked': blocked, if (password != null) 'password': password, if (expiry != null) 'subscription_end': expiry});
 
-  static Future<Map<String, dynamic>> deleteClient(String id) => _delete('/admin/clients/\$id');
+  static Future<Map<String, dynamic>> deleteClient(String id) => _delete('/admin/clients/$id');
 
   static Future<Map<String, dynamic>> addMovie(String title, String category, String poster, String url) =>
     _post('/admin/movies', {'title': title, 'category': category, 'poster': poster, 'stream_url': url});
 
-  static Future<Map<String, dynamic>> deleteMovie(String id) => _delete('/admin/movies/\$id');
+  static Future<Map<String, dynamic>> deleteMovie(String id) => _delete('/admin/movies/$id');
 
   static Future<Map<String, dynamic>> addSeries(String title, String category, String poster) =>
     _post('/admin/series', {'title': title, 'category': category, 'poster': poster});
 
-  static Future<Map<String, dynamic>> deleteSeries(String id) => _delete('/admin/series/\$id');
+  static Future<Map<String, dynamic>> deleteSeries(String id) => _delete('/admin/series/$id');
 
   static Future<Map<String, dynamic>> publishVersion(String version, String apkUrl, String changelog, bool force) =>
     _put('/admin/app/version', {'version': version, 'apkUrl': apkUrl, 'changelog': changelog, 'forceUpdate': force});
