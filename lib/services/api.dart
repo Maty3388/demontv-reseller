@@ -8,7 +8,7 @@ class AdminApi {
 
   static Map<String, String> get headers => {
     'Content-Type': 'application/json',
-    if (token != null) 'Authorization': 'Bearer \$token',
+    if (token != null) 'Authorization': 'Bearer $token',
   };
 
   static Future<void> loadToken() async {
