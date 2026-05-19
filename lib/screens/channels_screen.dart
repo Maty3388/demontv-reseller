@@ -212,8 +212,7 @@ class _ImportM3uDialogState extends State<_ImportM3uDialog> {
       if (_tab == 0) TextField(controller: _url, style: const TextStyle(color: Colors.white, fontSize: 13),
         decoration: InputDecoration(hintText: "https://...", filled: true, fillColor: AdminTheme.surfaceAlt, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8)))
       else TextField(controller: _paste, maxLines: 5, style: const TextStyle(color: Colors.white, fontSize: 11),
-        decoration: InputDecoration(hintText: "#EXTM3U
-...", filled: true, fillColor: AdminTheme.surfaceAlt, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8))),
+        decoration: InputDecoration(hintText: "#EXTM3U...", filled: true, fillColor: AdminTheme.surfaceAlt, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8)))),
       if (_error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(_error!, style: const TextStyle(color: AdminTheme.red, fontSize: 12))),
     ])),
     actions: [
