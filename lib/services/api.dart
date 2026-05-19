@@ -95,6 +95,12 @@ class AdminApi {
 
   static Future<Map<String, dynamic>> deleteSeries(String id) => _delete('/admin/series/$id');
 
+  static Future<Map<String, dynamic>> fetchM3u(String url) =>
+    _post('/admin/fetch-m3u', {'url': url});
+
+  static Future<Map<String, dynamic>> parseM3u(String content) =>
+    _post('/admin/parse-m3u', {'content': content});
+
   static Future<Map<String, dynamic>> publishVersion(String version, String apkUrl, String changelog, bool force) =>
     _put('/admin/app/version', {'version': version, 'apkUrl': apkUrl, 'changelog': changelog, 'forceUpdate': force});
 }
