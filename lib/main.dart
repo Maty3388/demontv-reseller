@@ -1,35 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'theme/app_theme.dart';
-import 'screens/splash_screen.dart';
+import 'services/api.dart';
 import 'screens/login_screen.dart';
-import 'screens/profile_screen.dart';
-import 'screens/main_screen.dart';
+import 'screens/dashboard_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-    statusBarIconBrightness: Brightness.light,
-    systemNavigationBarColor: Color(0xFF111111),
-  ));
-  runApp(const DemonTvPlusApp());
+  await AdminApi.loadToken();
+  runApp(const AdminApp());
 }
 
-class DemonTvPlusApp extends StatelessWidget {
-  const DemonTvPlusApp({super.key});
+class AdminApp extends StatelessWidget {
+  const AdminApp({super.key});
+
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: 'DemonTv Plus',
+    title: "DemonTv Admin",
     debugShowCheckedModeBanner: false,
-    theme: AppTheme.darkTheme,
-    initialRoute: '/',
+    theme: ThemeData(
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: const Color(0xFF0A0A0A),
+      appBarTheme: const AppBarTheme(elevation: 0),
+    ),
+    initialRoute: AdminApi.token != null ? "/dashboard" : "/",
     routes: {
-      '/':        (_) => const SplashScreen(),
-      '/login':   (_) => const LoginScreen(),
-      '/profile': (_) => const ProfileScreen(),
-      '/main':    (_) => const MainScreen(),
+      "/":          (_) => const LoginScreen(),
+      "/dashboard": (_) => const DashboardScreen(),
     },
   );
 }
