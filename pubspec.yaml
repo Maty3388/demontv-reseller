@@ -9,12 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  better_player: ^0.0.63
   http: ^1.1.0
   file_picker: ^6.2.1
-  provider: ^6.1.1
-  cached_network_image: ^3.3.0
-  carousel_slider: ^4.2.1
   shared_preferences: ^2.2.2
   cupertino_icons: ^1.0.6
 
