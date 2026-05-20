@@ -197,8 +197,17 @@ class _ImportM3uDialogState extends State<_ImportM3uDialog> {
   bool _loading = false;
   String? _error;
   int _tab = 0;
+  String? _fileName;
+  String? _fileContent;
 
-  @override void dispose() { _url.dispose(); _paste.dispose(); super.dispose(); }
+  Future<void> _pickFile() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['m3u','m3u8','txt'], withData: true);
+    if (result != null && result.files.single.bytes != null) {
+      setState(() { _fileName = result.files.single.name; _fileContent = String.fromCharCodes(result.files.single.bytes!); _error = null; });
+    }
+  }
+
+    @override void dispose() { _url.dispose(); _paste.dispose(); super.dispose(); }
 
   @override
   Widget build(BuildContext context) => AlertDialog(
@@ -208,11 +217,16 @@ class _ImportM3uDialogState extends State<_ImportM3uDialog> {
       Row(children: [
         Expanded(child: GestureDetector(onTap: () => setState(() => _tab = 0), child: Container(padding: const EdgeInsets.symmetric(vertical: 8), decoration: BoxDecoration(color: _tab == 0 ? AdminTheme.cyan.withOpacity(0.2) : Colors.transparent, border: Border(bottom: BorderSide(color: _tab == 0 ? AdminTheme.cyan : Colors.transparent, width: 2))), child: Text("URL", textAlign: TextAlign.center, style: TextStyle(color: _tab == 0 ? AdminTheme.cyan : AdminTheme.textSecondary, fontWeight: FontWeight.bold))))),
         Expanded(child: GestureDetector(onTap: () => setState(() => _tab = 1), child: Container(padding: const EdgeInsets.symmetric(vertical: 8), decoration: BoxDecoration(color: _tab == 1 ? AdminTheme.cyan.withOpacity(0.2) : Colors.transparent, border: Border(bottom: BorderSide(color: _tab == 1 ? AdminTheme.cyan : Colors.transparent, width: 2))), child: Text("Pegar", textAlign: TextAlign.center, style: TextStyle(color: _tab == 1 ? AdminTheme.cyan : AdminTheme.textSecondary, fontWeight: FontWeight.bold))))),
+        Expanded(child: GestureDetector(onTap: () => setState(() => _tab = 2), child: Container(padding: const EdgeInsets.symmetric(vertical: 8), decoration: BoxDecoration(color: _tab == 2 ? AdminTheme.cyan.withOpacity(0.2) : Colors.transparent, border: Border(bottom: BorderSide(color: _tab == 2 ? AdminTheme.cyan : Colors.transparent, width: 2))), child: Text("Archivo", textAlign: TextAlign.center, style: TextStyle(color: _tab == 2 ? AdminTheme.cyan : AdminTheme.textSecondary, fontWeight: FontWeight.bold))))),
       ]),
       const SizedBox(height: 12),
       if (_tab == 0) TextField(controller: _url, style: const TextStyle(color: Colors.white, fontSize: 13),
         decoration: InputDecoration(hintText: "https://...", filled: true, fillColor: AdminTheme.surfaceAlt, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8)))
-      else TextField(controller: _paste, maxLines: 5, style: const TextStyle(color: Colors.white, fontSize: 11),
+      else if (_tab == 1) TextField(controller: _paste, maxLines: 5, style: const TextStyle(color: Colors.white, fontSize: 11),
+      else Column(children: [
+        ElevatedButton.icon(icon: const Icon(Icons.upload_file, size: 18), label: const Text("Seleccionar .m3u"), style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.surfaceAlt, foregroundColor: AdminTheme.cyan), onPressed: _pickFile),
+        if (_fileName != null) ...[const SizedBox(height: 8), Container(padding: const EdgeInsets.all(8), decoration: BoxDecoration(color: AdminTheme.surfaceAlt, borderRadius: BorderRadius.circular(8)), child: Row(children: [const Icon(Icons.check_circle, color: AdminTheme.green, size: 16), const SizedBox(width: 6), Expanded(child: Text(_fileName!, style: const TextStyle(color: Colors.white, fontSize: 12), overflow: TextOverflow.ellipsis))]))],
+      ]),
         decoration: InputDecoration(hintText: "#EXTM3U...", filled: true, fillColor: AdminTheme.surfaceAlt, border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none), contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8))),
 
       if (_error != null) Padding(padding: const EdgeInsets.only(top: 8), child: Text(_error!, style: const TextStyle(color: AdminTheme.red, fontSize: 12))),
@@ -220,7 +234,7 @@ class _ImportM3uDialogState extends State<_ImportM3uDialog> {
     actions: [
       TextButton(onPressed: () => Navigator.pop(context), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
       TextButton(onPressed: _loading ? null : () async {
-        final content = _tab == 0 ? _url.text.trim() : _paste.text.trim();
+        String content = _tab == 0 ? _url.text.trim() : _tab == 1 ? _paste.text.trim() : (_fileContent ?? '');
         if (content.isEmpty) { setState(() => _error = "Ingresa URL o contenido M3U"); return; }
         setState(() { _loading = true; _error = null; });
         final r = _tab == 0
