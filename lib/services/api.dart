@@ -84,6 +84,7 @@ class AdminApi {
     _put('/admin/clients/$id', {if (blocked != null) 'blocked': blocked, if (password != null) 'password': password, if (expiry != null) 'subscription_end': expiry});
 
   static Future<Map<String, dynamic>> deleteClient(String id) => _delete('/admin/clients/$id');
+  static Future<Map<String, dynamic>> removeDevice(String id) => _delete('/admin/clients/$id/device');
 
   static Future<Map<String, dynamic>> addMovie(String title, String category, String poster, String url) =>
     _post('/admin/movies', {'title': title, 'category': category, 'poster': poster, 'stream_url': url});

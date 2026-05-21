@@ -46,6 +46,9 @@ class _ClientsState extends State<ClientsScreen> {
                     trailing: Row(mainAxisSize: MainAxisSize.min, children: [
                       IconButton(icon: Icon(blocked ? Icons.lock_open : Icons.lock_outline, color: blocked ? AdminTheme.green : AdminTheme.gold, size: 20),
                         onPressed: () async { await AdminApi.updateClient(id, blocked: !blocked); _load(); }),
+                      IconButton(icon: const Icon(Icons.phonelink_erase, color: AdminTheme.gold, size: 20),
+                        tooltip: "Eliminar dispositivo",
+                        onPressed: () async { await AdminApi.removeDevice(id); _load(); }),
                       IconButton(icon: const Icon(Icons.delete_outline, color: AdminTheme.red, size: 20),
                         onPressed: () async { await AdminApi.deleteClient(id); _load(); }),
                     ]),
