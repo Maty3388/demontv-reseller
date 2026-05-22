@@ -156,17 +156,23 @@ class _ClientsState extends State<ClientsScreen> {
     int months = 1;
     showDialog(context: ctx, builder: (c) => StatefulBuilder(builder: (c, ss) => AlertDialog(
       backgroundColor: AdminTheme.surface,
-      title: Text("Renovar: \$email", style: const TextStyle(color: Colors.white, fontSize: 13)),
-      content: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        IconButton(icon: const Icon(Icons.remove_circle, color: AdminTheme.cyan), onPressed: () { if (months > 1) ss(() => months--); }),
-        Text("\$months", style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-        IconButton(icon: const Icon(Icons.add_circle, color: AdminTheme.cyan), onPressed: () => ss(() => months++)),
+      title: Text("Renovar cuenta", style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold)),
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(email, style: const TextStyle(color: AdminTheme.cyan, fontSize: 12), maxLines: 1, overflow: TextOverflow.ellipsis),
+        const SizedBox(height: 14),
+        const Text("Seleccionar meses:", style: TextStyle(color: AdminTheme.textSecondary, fontSize: 12)),
+        const SizedBox(height: 10),
+        Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          _DurBtn("1 Mes",   1, months == 1, () => ss(() => months = 1)),
+          _DurBtn("3 Meses", 3, months == 3, () => ss(() => months = 3)),
+          _DurBtn("6 Meses", 6, months == 6, () => ss(() => months = 6)),
+        ]),
       ]),
       actions: [
         TextButton(onPressed: () => Navigator.pop(c), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
-        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black),
+        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
           onPressed: () async { Navigator.pop(c); await ResellerApi.extendClient(id, months: months); _load(); },
-          child: const Text("RENOVAR")),
+          child: const Text("RENOVAR", style: TextStyle(fontWeight: FontWeight.bold))),
       ])));
   }
 }
