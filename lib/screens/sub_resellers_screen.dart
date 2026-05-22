@@ -77,14 +77,15 @@ class _SubResellersState extends State<SubResellersScreen> {
     final name  = TextEditingController();
     final rank = _profile["rank"] ?? "Bronce";
     final allowed = {"Plata": ["Bronce"], "Oro": ["Bronce","Plata"], "Diamante": ["Bronce","Plata","Oro","Diamante"]};
-    final allowedRanks = allowed[rank] ?? [];
+    final allowedRanks = (allowed[rank] ?? []) as List<String>;
     String selectedRank = allowedRanks.isNotEmpty ? allowedRanks[0] : "Bronce";
     int balance = 0;
+    final balanceCtrl = TextEditingController(text: "0");
 
     showDialog(context: ctx, builder: (c) => StatefulBuilder(builder: (c, ss) => AlertDialog(
       backgroundColor: AdminTheme.surface,
       title: const Text("Nuevo Revendedor", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-      content: SingleChildScrollView(child: Column(mainAxisSize: MainAxisSize.min, children: [
+      content: SizedBox(width: 300, child: SingleChildScrollView(child: Column(mainAxisSize: MainAxisSize.min, children: [
         Row(children: [
           Expanded(child: _field(name, "Nombre")),
         ]),
@@ -96,7 +97,7 @@ class _SubResellersState extends State<SubResellersScreen> {
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C3DE0), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
             onPressed: () {
               final rand = DateTime.now().millisecondsSinceEpoch.toString().substring(7);
-              ss(() { email.text = "res$rand@demon.tv"; pass.text = "pass$rand"; });
+              ss(() { email.text = "res\$rand@demon.tv"; pass.text = "pass\$rand"; });
             },
             child: const Text("🎲", style: TextStyle(fontSize: 16))),
         ]),
@@ -120,17 +121,17 @@ class _SubResellersState extends State<SubResellersScreen> {
         const Align(alignment: Alignment.centerLeft, child: Text("Coins iniciales:", style: TextStyle(color: AdminTheme.textSecondary, fontSize: 12))),
         const SizedBox(height: 6),
         TextField(
+          controller: balanceCtrl,
           keyboardType: TextInputType.number,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
+          style: const TextStyle(color: Colors.white, fontSize: 18),
           textAlign: TextAlign.center,
-          onChanged: (v) => ss(() => balance = int.tryParse(v) ?? 0),
+          onChanged: (v) => balance = int.tryParse(v) ?? 0,
           decoration: InputDecoration(
             hintText: "0", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
             filled: true, fillColor: AdminTheme.surfaceAlt,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
             contentPadding: const EdgeInsets.symmetric(vertical: 10))),
-        ],
-      ])),
+      ]))),
       actions: [
         TextButton(onPressed: () => Navigator.pop(c), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
         ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black),
@@ -139,7 +140,7 @@ class _SubResellersState extends State<SubResellersScreen> {
               Navigator.pop(c);
               final r = await ResellerApi.createSubReseller(email.text.trim(), pass.text.trim(), name.text.trim(), selectedRank, balance);
               if (r["success"] == true) {
-                final text = "😈DemonPanel😈\n😈Vendedor Creado😈\n\nEmail: ${email.text.trim()}\nContraseña: ${pass.text.trim()}\nRango: $selectedRank";
+                final text = "😈DemonPanel😈\n😈Vendedor Creado😈\n\nEmail: \${email.text.trim()}\nContraseña: \${pass.text.trim()}\nRango: \$selectedRank";
                 await Clipboard.setData(ClipboardData(text: text));
                 if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("✅ Credenciales copiadas"), backgroundColor: AdminTheme.green));
                 _load();
@@ -150,6 +151,7 @@ class _SubResellersState extends State<SubResellersScreen> {
           }, child: const Text("CREAR")),
       ])));
   }
+
 
   Widget _field(TextEditingController ctrl, String hint, {bool obscure = false}) =>
     TextField(controller: ctrl, obscureText: obscure, style: const TextStyle(color: Colors.white, fontSize: 13),
