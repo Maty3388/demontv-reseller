@@ -9,7 +9,7 @@ class ResellerApi {
 
   static Map<String, String> get _headers => {
     'Content-Type': 'application/json',
-    if (_token != null) 'Authorization': 'Bearer \$_token',
+    if (_token != null) 'Authorization': 'Bearer $_token',
   };
 
   static Future<void> loadToken() async {
@@ -26,7 +26,7 @@ class ResellerApi {
   static bool get isLoggedIn => _token != null;
 
   static Future<Map<String, dynamic>> login(String email, String password) async {
-    final r = await http.post(Uri.parse('\$_base/reseller/login'),
+    final r = await http.post(Uri.parse('$_base/reseller/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}));
     final data = jsonDecode(r.body);
@@ -39,23 +39,23 @@ class ResellerApi {
   }
 
   static Future<Map<String, dynamic>> getProfile() async {
-    final r = await http.get(Uri.parse('\$_base/reseller/profile'), headers: _headers);
+    final r = await http.get(Uri.parse('$_base/reseller/profile'), headers: _headers);
     return jsonDecode(r.body);
   }
 
   static Future<Map<String, dynamic>> getClients() async {
-    final r = await http.get(Uri.parse('\$_base/reseller/clients'), headers: _headers);
+    final r = await http.get(Uri.parse('$_base/reseller/clients'), headers: _headers);
     return jsonDecode(r.body);
   }
 
   static Future<Map<String, dynamic>> createClient(String email, String password, int months) async {
-    final r = await http.post(Uri.parse('\$_base/reseller/clients'),
+    final r = await http.post(Uri.parse('$_base/reseller/clients'),
       headers: _headers, body: jsonEncode({'email': email, 'password': password, 'months': months}));
     return jsonDecode(r.body);
   }
 
   static Future<Map<String, dynamic>> extendClient(String id, {int months = 1}) async {
-    final r = await http.post(Uri.parse('\$_base/reseller/clients/\$id/extend'),
+    final r = await http.post(Uri.parse('$_base/reseller/clients/$id/extend'),
       headers: _headers, body: jsonEncode({'months': months}));
     return jsonDecode(r.body);
   }
