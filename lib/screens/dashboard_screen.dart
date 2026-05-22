@@ -83,7 +83,7 @@ class _DashboardState extends State<DashboardScreen> {
             const SizedBox(height: 16),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text("Progreso a \${nextRank['name']}", style: const TextStyle(color: Colors.white70, fontSize: 12)),
-              Text('\$totalSold / \${nextRank['min']} vendidos', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+              Text("$totalSold / ${nextRank['min']} vendidos", style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
             ]),
             const SizedBox(height: 6),
             ClipRRect(borderRadius: BorderRadius.circular(4),
