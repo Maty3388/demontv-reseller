@@ -55,6 +55,8 @@ class ResellerApi {
   }
 
   static Future<Map<String, dynamic>> extendClient(String id, {int months = 1}) async {
+  static Future<Map<String, dynamic>> getSubResellers() async { final r = await http.get(Uri.parse('\$_base/reseller/sub-resellers'), headers: _headers); return jsonDecode(r.body); }
+  static Future<Map<String, dynamic>> createSubReseller(String email, String pass, String name, String rank, int balance) async { final r = await http.post(Uri.parse('\$_base/reseller/create-reseller'), headers: _headers, body: jsonEncode({'email': email, 'password': pass, 'name': name, 'rank': rank, 'balance': balance})); return jsonDecode(r.body); }
     final r = await http.post(Uri.parse('$_base/reseller/clients/$id/extend'),
       headers: _headers, body: jsonEncode({'months': months}));
     return jsonDecode(r.body);

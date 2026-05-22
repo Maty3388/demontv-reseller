@@ -115,7 +115,7 @@ class _DashboardState extends State<DashboardScreen> {
       title: const Text("DemonTv Revendedor", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: AdminTheme.textSecondary), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
-      : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen()]),
+      : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen(), const SubResellersScreen()]),
     bottomNavigationBar: Container(
       decoration: BoxDecoration(color: AdminTheme.surface, border: Border(top: BorderSide(color: AdminTheme.border, width: 0.5))),
       child: SafeArea(child: Padding(padding: const EdgeInsets.symmetric(vertical: 8),
