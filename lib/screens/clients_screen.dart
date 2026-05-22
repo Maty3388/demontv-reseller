@@ -154,6 +154,52 @@ class _ClientsState extends State<ClientsScreen> {
   }
 
 
+
+  void _showEditDialog(BuildContext ctx, String id, String email) {
+    final newEmail = TextEditingController(text: email);
+    final newPass  = TextEditingController();
+    showDialog(context: ctx, builder: (c) => AlertDialog(
+      backgroundColor: AdminTheme.surface,
+      title: const Text("Editar cuenta", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      content: Column(mainAxisSize: MainAxisSize.min, children: [
+        TextField(controller: newEmail, style: const TextStyle(color: Colors.white, fontSize: 13),
+          decoration: InputDecoration(hintText: "Email", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
+            filled: true, fillColor: AdminTheme.surfaceAlt,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none))),
+        const SizedBox(height: 8),
+        TextField(controller: newPass, style: const TextStyle(color: Colors.white, fontSize: 13),
+          decoration: InputDecoration(hintText: "Nueva contraseña (vacío = no cambiar)", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
+            filled: true, fillColor: AdminTheme.surfaceAlt,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none))),
+      ]),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
+        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black),
+          onPressed: () async {
+            Navigator.pop(c);
+            await ResellerApi.updateClient(id, email: newEmail.text.trim(), password: newPass.text.isEmpty ? null : newPass.text.trim());
+            _load();
+          }, child: const Text("GUARDAR")),
+      ]));
+  }
+
+  Future<void> _removeDevice(BuildContext ctx, String id) async {
+    final confirm = await showDialog<bool>(context: ctx, builder: (c) => AlertDialog(
+      backgroundColor: AdminTheme.surface,
+      title: const Text("Eliminar dispositivo", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      content: const Text("Se desvinculará el dispositivo de esta cuenta.", style: TextStyle(color: AdminTheme.textSecondary, fontSize: 13)),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c, false), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
+        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.red, foregroundColor: Colors.white),
+          onPressed: () => Navigator.pop(c, true), child: const Text("ELIMINAR")),
+      ]));
+    if (confirm == true) {
+      await ResellerApi.removeDevice(id);
+      if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("Dispositivo eliminado"), backgroundColor: AdminTheme.green));
+      _load();
+    }
+  }
+
   void _showRenewDialog(BuildContext ctx, String id, String email) {
     int months = 1;
     showDialog(context: ctx, builder: (c) => StatefulBuilder(builder: (c, ss) => AlertDialog(
