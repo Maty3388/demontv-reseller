@@ -190,7 +190,7 @@ class _SmallBtn extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
-  const _SmallBtn({required this.icon, required this.color, required this.onTap});
+  const _SmallBtn({super.key, required this.icon, required this.color, required this.onTap});
   @override
   Widget build(BuildContext context) => GestureDetector(
     onTap: onTap,
