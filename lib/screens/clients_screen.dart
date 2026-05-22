@@ -93,39 +93,64 @@ class _ClientsState extends State<ClientsScreen> {
     final email = TextEditingController();
     final pass  = TextEditingController();
     int months = 1;
+    bool isDemo = false;
     showDialog(context: ctx, builder: (c) => StatefulBuilder(builder: (c, ss) => AlertDialog(
       backgroundColor: AdminTheme.surface,
       title: const Text("Nuevo Cliente", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-      content: Column(mainAxisSize: MainAxisSize.min, children: [
-        TextField(controller: email, style: const TextStyle(color: Colors.white, fontSize: 13),
-          decoration: InputDecoration(hintText: "Email", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
-            filled: true, fillColor: AdminTheme.surfaceAlt,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none))),
+      content: SingleChildScrollView(child: Column(mainAxisSize: MainAxisSize.min, children: [
+        // Email con boton generar
+        Row(children: [
+          Expanded(child: TextField(controller: email, style: const TextStyle(color: Colors.white, fontSize: 12),
+            decoration: InputDecoration(hintText: "Email", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
+              filled: true, fillColor: AdminTheme.surfaceAlt,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10)))),
+          const SizedBox(width: 6),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C3DE0), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+            onPressed: () {
+              final rand = DateTime.now().millisecondsSinceEpoch.toString().substring(7);
+              ss(() {
+                email.text = "user$rand@demon.tv";
+                pass.text = "pass$rand";
+              });
+            },
+            child: const Text("🎲", style: TextStyle(fontSize: 16))),
+        ]),
         const SizedBox(height: 8),
-        TextField(controller: pass, style: const TextStyle(color: Colors.white, fontSize: 13),
+        // Password
+        TextField(controller: pass, style: const TextStyle(color: Colors.white, fontSize: 12),
           decoration: InputDecoration(hintText: "Contraseña", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
             filled: true, fillColor: AdminTheme.surfaceAlt,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none))),
-        const SizedBox(height: 12),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          IconButton(icon: const Icon(Icons.remove_circle, color: AdminTheme.cyan), onPressed: () { if (months > 1) ss(() => months--); }),
-          Text("\$months \${months > 1 ? 'meses' : 'mes'}", style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
-          IconButton(icon: const Icon(Icons.add_circle, color: AdminTheme.cyan), onPressed: () => ss(() => months++)),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10))),
+        const SizedBox(height: 14),
+        // Botones de duracion
+        Wrap(spacing: 6, runSpacing: 6, children: [
+          _DurBtn("Demo 1h", 0, months == 0, () => ss(() { months = 0; isDemo = true; })),
+          _DurBtn("1 Mes",   1, months == 1 && !isDemo, () => ss(() { months = 1; isDemo = false; })),
+          _DurBtn("3 Meses", 3, months == 3, () => ss(() { months = 3; isDemo = false; })),
+          _DurBtn("6 Meses", 6, months == 6, () => ss(() { months = 6; isDemo = false; })),
         ]),
-      ]),
+      ])),
       actions: [
         TextButton(onPressed: () => Navigator.pop(c), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
-        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
           onPressed: () async {
             if (email.text.isNotEmpty && pass.text.isNotEmpty) {
               Navigator.pop(c);
-              final r = await ResellerApi.createClient(email.text.trim(), pass.text.trim(), months);
-              if (r["success"] == true) _load();
-              else if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text(r["error"] ?? "Error"), backgroundColor: AdminTheme.red));
+              final r = await ResellerApi.createClient(email.text.trim(), pass.text.trim(), isDemo ? 0 : months);
+              if (r["success"] == true) {
+                _load();
+              } else if (ctx.mounted) {
+                ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text(r["error"] ?? "Error"), backgroundColor: AdminTheme.red));
+              }
             }
-          }, child: const Text("CREAR")),
+          }, child: const Text("CREAR", style: TextStyle(fontWeight: FontWeight.bold))),
       ])));
   }
+
 
   void _showRenewDialog(BuildContext ctx, String id, String email) {
     int months = 1;
@@ -157,4 +182,21 @@ class _SmallBtn extends StatelessWidget {
     child: Container(padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(6)),
       child: Icon(icon, color: color, size: 14)));
+}
+
+class _DurBtn extends StatelessWidget {
+  final String label;
+  final int months;
+  final bool selected;
+  final VoidCallback onTap;
+  const _DurBtn(this.label, this.months, this.selected, this.onTap, {super.key});
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: selected ? AdminTheme.cyan.withOpacity(0.2) : AdminTheme.surfaceAlt,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: selected ? AdminTheme.cyan : Colors.transparent)),
+      child: Text(label, style: TextStyle(color: selected ? AdminTheme.cyan : AdminTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.bold))));
 }
