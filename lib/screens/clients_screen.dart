@@ -42,22 +42,29 @@ class _ClientsState extends State<ClientsScreen> {
           // Balance card
           Container(
             margin: const EdgeInsets.all(14),
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(colors: [Color(0xFF00CFDD), Color(0xFF0099AA)], begin: Alignment.topLeft, end: Alignment.bottomRight),
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: const Color(0xFF00CFDD).withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 4))]),
+              gradient: const LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFB03DE0), Color(0xFFE03D8F)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [BoxShadow(color: const Color(0xFF6C3DE0).withOpacity(0.5), blurRadius: 20, offset: const Offset(0, 6))]),
             child: Row(children: [
-              const Icon(Icons.account_balance_wallet, color: Colors.black, size: 36),
+              Container(padding: const EdgeInsets.all(10), decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+                child: const Icon(Icons.monetization_on, color: Colors.white, size: 32)),
               const SizedBox(width: 14),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const Text("Crédito Disponible", style: TextStyle(color: Colors.black87, fontSize: 12, fontWeight: FontWeight.w600)),
-                Text("${_stats["balance"] ?? 0} meses", style: const TextStyle(color: Colors.black, fontSize: 28, fontWeight: FontWeight.bold)),
+                const Text("Coins", style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1)),
+                Row(children: [
+                  Text("\${_stats["balance"] ?? 0}", style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
+                  const SizedBox(width: 6),
+                  const Icon(Icons.toll, color: Colors.white70, size: 20),
+                ]),
               ]),
               const Spacer(),
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-                Text("${_stats["activos"] ?? 0} activos", style: const TextStyle(color: Colors.black87, fontSize: 11)),
-                Text("${_stats["total"] ?? 0} total", style: const TextStyle(color: Colors.black54, fontSize: 11)),
+                Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
+                  child: Text("\${_stats["activos"] ?? 0} activos", style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600))),
+                const SizedBox(height: 4),
+                Text("\${_stats["total"] ?? 0} total", style: const TextStyle(color: Colors.white60, fontSize: 11)),
               ]),
             ])),
           // Buscador
