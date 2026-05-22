@@ -95,34 +95,32 @@ class _ClientsState extends State<ClientsScreen> {
                   final expiringSoon = days >= 0 && days <= 5;
                   Color statusColor = expired ? AdminTheme.red : expiringSoon ? AdminTheme.gold : AdminTheme.green;
                   return Container(
-                    margin: const EdgeInsets.only(bottom: 8),
                     decoration: BoxDecoration(
                       color: AdminTheme.surface,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: blocked ? AdminTheme.red.withOpacity(0.3) : statusColor.withOpacity(0.2), width: 1)),
-                    child: Padding(padding: const EdgeInsets.all(12), child: Row(children: [
-                      CircleAvatar(radius: 20, backgroundColor: blocked ? AdminTheme.red.withOpacity(0.2) : statusColor.withOpacity(0.15),
-                        child: Icon(blocked ? Icons.block : Icons.person, color: blocked ? AdminTheme.red : statusColor, size: 20)),
-                      const SizedBox(width: 10),
-                      Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(c["email"] ?? "", style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600), maxLines: 1, overflow: TextOverflow.ellipsis),
-                        const SizedBox(height: 2),
-                        Row(children: [
-                          Icon(Icons.calendar_today, size: 10, color: statusColor),
-                          const SizedBox(width: 4),
-                          Text(expired ? "Vencido" : expiringSoon ? "Vence en $days días" : "Vence: ${c["subscription_end"] ?? "N/A"}",
-                            style: TextStyle(color: statusColor, fontSize: 11)),
-                        ]),
-                      ])),
-                      // Botones
-                      IconButton(icon: const Icon(Icons.calendar_month, color: AdminTheme.cyan, size: 20), tooltip: "Renovar",
-                        onPressed: () => _showRenewDialog(ctx, id, c["email"])),
-                      IconButton(icon: Icon(blocked ? Icons.lock_open : Icons.lock_outline, color: blocked ? AdminTheme.green : AdminTheme.gold, size: 20),
-                        onPressed: () async { await AdminApi.updateClient(id, blocked: !blocked); _load(); }),
-                      IconButton(icon: const Icon(Icons.phonelink_erase, color: AdminTheme.textSecondary, size: 20), tooltip: "Quitar dispositivo",
-                        onPressed: () async { await AdminApi.removeDevice(id); _load(); }),
-                      IconButton(icon: const Icon(Icons.delete_outline, color: AdminTheme.red, size: 20),
-                        onPressed: () => _confirmDelete(ctx, id, c["email"])),
+                    child: Padding(padding: const EdgeInsets.all(10), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Row(children: [
+                        CircleAvatar(radius: 12, backgroundColor: statusColor.withOpacity(0.15),
+                          child: Icon(blocked ? Icons.block : Icons.person, color: blocked ? AdminTheme.red : statusColor, size: 12)),
+                        const SizedBox(width: 6),
+                        Container(padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                          decoration: BoxDecoration(color: statusColor.withOpacity(0.15), borderRadius: BorderRadius.circular(6)),
+                          child: Text(expired ? "Vencido" : expiringSoon ? "$days días" : "Activo",
+                            style: TextStyle(color: statusColor, fontSize: 9, fontWeight: FontWeight.bold))),
+                      ]),
+                      const SizedBox(height: 6),
+                      Text(c["email"] ?? "", style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      const SizedBox(height: 2),
+                      Text(c["subscription_end"] ?? "N/A", style: TextStyle(color: statusColor, fontSize: 10)),
+                      const Spacer(),
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                        _SmallBtn(icon: Icons.calendar_month, color: AdminTheme.cyan, onTap: () => _showRenewDialog(ctx, id, c["email"])),
+                        _SmallBtn(icon: Icons.lock_reset, color: AdminTheme.gold, onTap: () => _showPasswordDialog(ctx, id, c["email"])),
+                        _SmallBtn(icon: blocked ? Icons.lock_open : Icons.lock_outline, color: blocked ? AdminTheme.green : AdminTheme.textSecondary, onTap: () async { await AdminApi.updateClient(id, blocked: !blocked); _load(); }),
+                        _SmallBtn(icon: Icons.phonelink_erase, color: AdminTheme.textSecondary, onTap: () async { await AdminApi.removeDevice(id); _load(); }),
+                        _SmallBtn(icon: Icons.delete_outline, color: AdminTheme.red, onTap: () => _confirmDelete(ctx, id, c["email"])),
+                      ]),
                     ])));
                 })),
         ]));
