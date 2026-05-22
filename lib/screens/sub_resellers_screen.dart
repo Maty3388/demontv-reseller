@@ -119,10 +119,16 @@ class _SubResellersState extends State<SubResellersScreen> {
         ],
         const Align(alignment: Alignment.centerLeft, child: Text("Coins iniciales:", style: TextStyle(color: AdminTheme.textSecondary, fontSize: 12))),
         const SizedBox(height: 6),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          IconButton(icon: const Icon(Icons.remove_circle, color: AdminTheme.cyan), onPressed: () { if (balance > 0) ss(() => balance--); }),
-          Text("$balance", style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
-          IconButton(icon: const Icon(Icons.add_circle, color: AdminTheme.cyan), onPressed: () => ss(() => balance++)),
+        TextField(
+          keyboardType: TextInputType.number,
+          style: const TextStyle(color: Colors.white, fontSize: 20),
+          textAlign: TextAlign.center,
+          onChanged: (v) => ss(() => balance = int.tryParse(v) ?? 0),
+          decoration: InputDecoration(
+            hintText: "0", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
+            filled: true, fillColor: AdminTheme.surfaceAlt,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+            contentPadding: const EdgeInsets.symmetric(vertical: 10))),
         ]),
       ])),
       actions: [
