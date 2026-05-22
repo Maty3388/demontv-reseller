@@ -129,7 +129,7 @@ class _SubResellersState extends State<SubResellersScreen> {
             filled: true, fillColor: AdminTheme.surfaceAlt,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
             contentPadding: const EdgeInsets.symmetric(vertical: 10))),
-        ]),
+        ],
       ])),
       actions: [
         TextButton(onPressed: () => Navigator.pop(c), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
