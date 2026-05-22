@@ -54,7 +54,7 @@ class _ClientsState extends State<ClientsScreen> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 const Text("Coins", style: TextStyle(color: Colors.white70, fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 1)),
                 Row(children: [
-                  Text("\${_stats["balance"] ?? 0}", style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
+                  Text("\${_stats['balance'] ?? 0}", style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
                   const SizedBox(width: 6),
                   const Icon(Icons.toll, color: Colors.white70, size: 20),
                 ]),
@@ -62,9 +62,9 @@ class _ClientsState extends State<ClientsScreen> {
               const Spacer(),
               Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(8)),
-                  child: Text("\${_stats["activos"] ?? 0} activos", style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600))),
+                  child: Text("\${_stats['activos'] ?? 0} activos", style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600))),
                 const SizedBox(height: 4),
-                Text("\${_stats["total"] ?? 0} total", style: const TextStyle(color: Colors.white60, fontSize: 11)),
+                Text("\${_stats['total'] ?? 0} total", style: const TextStyle(color: Colors.white60, fontSize: 11)),
               ]),
             ])),
           // Buscador
