@@ -91,6 +91,17 @@ class _DashboardState extends State<DashboardScreen> {
           _StatCard("Expiradas", "${_profile["vencidos"] ?? 0}", Icons.cancel_outlined, AdminTheme.red),
           _StatCard("Revendedores", "${_profile["sub_resellers"] ?? 0}", Icons.group_outlined, const Color(0xFF6C3DE0)),
         ]),
+      const SizedBox(height: 14),
+      TextField(
+        style: const TextStyle(color: Colors.white, fontSize: 13),
+        onChanged: (q) {},
+        decoration: InputDecoration(
+          hintText: "Buscar cliente...",
+          hintStyle: const TextStyle(color: AdminTheme.textSecondary),
+          prefixIcon: const Icon(Icons.search, color: AdminTheme.textSecondary, size: 20),
+          filled: true, fillColor: AdminTheme.surface,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10))),
     ]));
   }
 
@@ -99,7 +110,8 @@ class _DashboardState extends State<DashboardScreen> {
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: const Color(0xFF0A0A0F),
     appBar: AppBar(backgroundColor: AdminTheme.surface, elevation: 0,
-      title: const Text("DemonTv Revendedor", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+      centerTitle: true,
+      title: const Text("Bienvenido al Panel\nDemonTv Revendedores", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: AdminTheme.textSecondary), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
       : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen(), const SubResellersScreen()]),
