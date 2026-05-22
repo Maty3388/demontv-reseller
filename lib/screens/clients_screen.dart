@@ -109,7 +109,7 @@ class _ClientsState extends State<ClientsScreen> {
         const SizedBox(height: 12),
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           IconButton(icon: const Icon(Icons.remove_circle, color: AdminTheme.cyan), onPressed: () { if (months > 1) ss(() => months--); }),
-          Text("\$months mes\${months > 1 ? "es" : ""}", style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+          Text("\$months \${months > 1 ? 'meses' : 'mes'}", style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
           IconButton(icon: const Icon(Icons.add_circle, color: AdminTheme.cyan), onPressed: () => ss(() => months++)),
         ]),
       ]),

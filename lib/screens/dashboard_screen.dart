@@ -83,7 +83,7 @@ class _DashboardState extends State<DashboardScreen> {
             const SizedBox(height: 16),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text("Progreso a \${nextRank["name"]}", style: const TextStyle(color: Colors.white70, fontSize: 12)),
-              Text("\$totalSold / \${nextRank["min"]} vendidos", style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+              Text('\$totalSold / \${nextRank["min"]} vendidos', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
             ]),
             const SizedBox(height: 6),
             ClipRRect(borderRadius: BorderRadius.circular(4),
@@ -105,7 +105,7 @@ class _DashboardState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: AdminTheme.background,
+    backgroundColor: const Color(0xFF0A0A0F),
     appBar: AppBar(backgroundColor: AdminTheme.surface, elevation: 0,
       title: const Text("DemonTv Revendedor", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: AdminTheme.textSecondary), onPressed: _logout)]),
