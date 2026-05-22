@@ -17,7 +17,7 @@ class DemonTvResellerApp extends StatelessWidget {
     title: 'DemonTv Revendedor',
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      scaffoldBackgroundColor: AdminTheme.background,
+      scaffoldBackgroundColor: AdminTheme.bg,
       colorScheme: ColorScheme.dark(primary: AdminTheme.cyan),
       useMaterial3: false,
     ),

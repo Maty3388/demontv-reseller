@@ -59,9 +59,9 @@ class _DashboardState extends State<DashboardScreen> {
       {"name": "Oro",    "min": 30, "max": 60},
       {"name": "Diamante","min": 60, "max": 60},
     ];
-    final currentRank = ranks.firstWhere((r) => r["name"] == rank, orElse: () => ranks[0]);
+    final currentRank = ranks.firstWhere((r) => r['name'] == rank, orElse: () => ranks[0]);
     final nextRank = ranks.indexOf(currentRank) < ranks.length - 1 ? ranks[ranks.indexOf(currentRank) + 1] : null;
-    final progress = nextRank != null ? (totalSold - (currentRank["min"] as int)) / ((nextRank["min"] as int) - (currentRank["min"] as int)) : 1.0;
+    final progress = nextRank != null ? (totalSold - (currentRank['min'] as int)) / ((nextRank['min'] as int) - (currentRank['min'] as int)) : 1.0;
 
     return SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(children: [
       // Rango card
@@ -76,14 +76,14 @@ class _DashboardState extends State<DashboardScreen> {
             const SizedBox(width: 12),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(rank, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-              Text(_profile["name"] ?? _profile["email"] ?? "", style: const TextStyle(color: Colors.white70, fontSize: 13)),
+              Text(_profile['name'] ?? _profile["email"] ?? "", style: const TextStyle(color: Colors.white70, fontSize: 13)),
             ]),
           ]),
           if (nextRank != null) ...[
             const SizedBox(height: 16),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text("Progreso a \${nextRank["name"]}", style: const TextStyle(color: Colors.white70, fontSize: 12)),
-              Text('\$totalSold / \${nextRank["min"]} vendidos', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+              Text("Progreso a \${nextRank['name']}", style: const TextStyle(color: Colors.white70, fontSize: 12)),
+              Text('\$totalSold / \${nextRank['min']} vendidos', style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
             ]),
             const SizedBox(height: 6),
             ClipRRect(borderRadius: BorderRadius.circular(4),

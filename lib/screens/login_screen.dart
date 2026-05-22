@@ -27,7 +27,7 @@ class _LoginState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    backgroundColor: AdminTheme.background,
+    backgroundColor: AdminTheme.bg,
     body: Center(child: SingleChildScrollView(child: Padding(padding: const EdgeInsets.all(32),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         Container(width: 80, height: 80,
