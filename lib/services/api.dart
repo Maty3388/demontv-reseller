@@ -61,4 +61,17 @@ class ResellerApi {
   }
   static Future<Map<String, dynamic>> getSubResellers() async { final r = await http.get(Uri.parse("$_base/reseller/sub-resellers"), headers: _headers); return jsonDecode(r.body); }
   static Future<Map<String, dynamic>> createSubReseller(String email, String pass, String name, String rank, int balance) async { final r = await http.post(Uri.parse("$_base/reseller/create-reseller"), headers: _headers, body: jsonEncode({"email": email, "password": pass, "name": name, "rank": rank, "balance": balance})); return jsonDecode(r.body); }
+
+  static Future<Map<String, dynamic>> updateClient(String id, {String? email, String? password}) async {
+    final body = <String, dynamic>{};
+    if (email != null) body['email'] = email;
+    if (password != null) body['password'] = password;
+    final r = await http.patch(Uri.parse('$_base/reseller/clients/$id'), headers: _headers, body: jsonEncode(body));
+    return jsonDecode(r.body);
+  }
+
+  static Future<void> removeDevice(String id) async {
+    await http.delete(Uri.parse('$_base/reseller/clients/$id/device'), headers: _headers);
+  }
+
 }
