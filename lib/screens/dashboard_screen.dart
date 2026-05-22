@@ -99,11 +99,11 @@ class _DashboardState extends State<DashboardScreen> {
       const SizedBox(height: 16),
       // Stats
       Row(children: [
-        Expanded(child: _StatCard("Coins", "\$balance", Icons.monetization_on, const Color(0xFF6C3DE0))),
+        Expanded(child: _StatCard("Coins", "$balance", Icons.monetization_on, const Color(0xFF6C3DE0))),
         const SizedBox(width: 12),
-        Expanded(child: _StatCard("Clientes", "\$clientsCount", Icons.people, AdminTheme.cyan)),
+        Expanded(child: _StatCard("Clientes", "$clientsCount", Icons.people, AdminTheme.cyan)),
         const SizedBox(width: 12),
-        Expanded(child: _StatCard("Vendidos", "\$totalSold", Icons.bar_chart, AdminTheme.green)),
+        Expanded(child: _StatCard("Vendidos", "$totalSold", Icons.bar_chart, AdminTheme.green)),
       ]),
     ]));
   }
