@@ -84,7 +84,7 @@ class _ClientsState extends State<ClientsScreen> {
             ? const Center(child: Text("No hay clientes", style: TextStyle(color: AdminTheme.textSecondary)))
             : GridView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.4),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.1),
                 itemCount: _filtered.length,
                 itemBuilder: (ctx, i) {
                   final c = _filtered[i];
