@@ -13,10 +13,15 @@ class _DashboardState extends State<DashboardScreen> {
   Map _profile = {};
   bool _loading = true;
 
-  final _tabs = const [
-    {"icon": Icons.dashboard_outlined, "label": "Inicio"},
-    {"icon": Icons.people_outline,     "label": "Clientes"},
-  ];
+  List<Map> get _tabs {
+    final rank = _profile["rank"] ?? "Bronce";
+    final tabs = [
+      {"icon": Icons.dashboard_outlined, "label": "Inicio"},
+      {"icon": Icons.people_outline,     "label": "Clientes"},
+    ];
+    if (rank != "Bronce") tabs.add({"icon": Icons.group_add_outlined, "label": "Revendedores"});
+    return tabs;
+  }
 
   @override void initState() { super.initState(); _loadProfile(); }
 
