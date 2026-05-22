@@ -84,6 +84,8 @@ class _ClientsState extends State<ClientsScreen> {
                     const Spacer(),
                     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                       _SmallBtn(icon: Icons.calendar_month, color: AdminTheme.cyan, onTap: () => _showRenewDialog(ctx, id, c["email"])),
+                        _SmallBtn(icon: Icons.edit, color: AdminTheme.gold, onTap: () => _showEditDialog(ctx, id, c["email"])),
+                        _SmallBtn(icon: Icons.phonelink_erase, color: AdminTheme.textSecondary, onTap: () => _removeDevice(ctx, id)),
                     ]),
                   ])));
               })),
