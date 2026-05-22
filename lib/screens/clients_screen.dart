@@ -185,6 +185,7 @@ class _ClientsState extends State<ClientsScreen> {
       ]));
   
 }
+}
 
 class _SmallBtn extends StatelessWidget {
   final IconData icon;
