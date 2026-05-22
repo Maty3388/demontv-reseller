@@ -82,8 +82,9 @@ class _ClientsState extends State<ClientsScreen> {
           // Lista clientes
           Expanded(child: _filtered.isEmpty
             ? const Center(child: Text("No hay clientes", style: TextStyle(color: AdminTheme.textSecondary)))
-            : ListView.builder(
+            : GridView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 8, mainAxisSpacing: 8, childAspectRatio: 1.4),
                 itemCount: _filtered.length,
                 itemBuilder: (ctx, i) {
                   final c = _filtered[i];
