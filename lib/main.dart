@@ -1,32 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'services/api.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
+import 'theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  await AdminApi.loadToken();
-  runApp(const AdminApp());
+  await ResellerApi.loadToken();
+  runApp(const DemonTvResellerApp());
 }
 
-class AdminApp extends StatelessWidget {
-  const AdminApp({super.key});
-
+class DemonTvResellerApp extends StatelessWidget {
+  const DemonTvResellerApp({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: "DemonTv Admin",
+    title: 'DemonTv Revendedor',
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
-      brightness: Brightness.dark,
-      scaffoldBackgroundColor: const Color(0xFF0A0A0A),
-      appBarTheme: const AppBarTheme(elevation: 0),
+      scaffoldBackgroundColor: AdminTheme.background,
+      colorScheme: ColorScheme.dark(primary: AdminTheme.cyan),
+      useMaterial3: false,
     ),
-    initialRoute: AdminApi.token != null ? "/dashboard" : "/",
+    initialRoute: ResellerApi.isLoggedIn ? '/dashboard' : '/',
     routes: {
-      "/":          (_) => const LoginScreen(),
-      "/dashboard": (_) => const DashboardScreen(),
+      '/': (ctx) => const LoginScreen(),
+      '/dashboard': (ctx) => const DashboardScreen(),
     },
   );
 }
