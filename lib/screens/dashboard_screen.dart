@@ -55,59 +55,45 @@ class _DashboardState extends State<DashboardScreen> {
   Widget _buildHome() {
     final rank = _profile["rank"] ?? "Bronce";
     final balance = _profile["balance"] ?? 0;
-    final totalSold = _profile["total_sold"] ?? 0;
-    final clientsCount = _profile["clients_count"] ?? 0;
 
-    // Progreso al siguiente rango
-    final ranks = [
-      {"name": "Bronce", "min": 0, "max": 10},
-      {"name": "Plata",  "min": 10, "max": 30},
-      {"name": "Oro",    "min": 30, "max": 60},
-      {"name": "Diamante","min": 60, "max": 60},
-    ];
-    final currentRank = ranks.firstWhere((r) => r['name'] == rank, orElse: () => ranks[0]);
-    final nextRank = ranks.indexOf(currentRank) < ranks.length - 1 ? ranks[ranks.indexOf(currentRank) + 1] : null;
-    final progress = nextRank != null ? (totalSold - (currentRank['min'] as int)) / ((nextRank['min'] as int) - (currentRank['min'] as int)) : 1.0;
-
-    return SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(children: [
-      // Rango card
-      Container(width: double.infinity, padding: const EdgeInsets.all(20),
+    return SingleChildScrollView(padding: const EdgeInsets.all(14), child: Column(children: [
+      // Card principal
+      Container(width: double.infinity, padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [_rankColor(rank).withOpacity(0.8), _rankColor(rank).withOpacity(0.4)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          gradient: LinearGradient(colors: [_rankColor(rank), _rankColor(rank).withOpacity(0.6)], begin: Alignment.topLeft, end: Alignment.bottomRight),
           borderRadius: BorderRadius.circular(18),
           boxShadow: [BoxShadow(color: _rankColor(rank).withOpacity(0.4), blurRadius: 16, offset: const Offset(0,4))]),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [
-            Text(_rankEmoji(rank), style: const TextStyle(fontSize: 36)),
-            const SizedBox(width: 12),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(rank, style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
-              Text(_profile['name'] ?? _profile["email"] ?? "", style: const TextStyle(color: Colors.white70, fontSize: 13)),
+        child: Row(children: [
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text("Saldo", style: TextStyle(color: Colors.white70, fontSize: 12, letterSpacing: 1)),
+            const SizedBox(height: 4),
+            Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              const Text(r"$", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(width: 2),
+              Text("$balance", style: const TextStyle(color: Colors.white, fontSize: 36, fontWeight: FontWeight.bold)),
             ]),
+            const Text("Coins disponibles", style: TextStyle(color: Colors.white60, fontSize: 11)),
+          ])),
+          Container(width: 1, height: 60, color: Colors.white24, margin: const EdgeInsets.symmetric(horizontal: 14)),
+          Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+            Text(_rankEmoji(rank), style: const TextStyle(fontSize: 28)),
+            const SizedBox(height: 4),
+            Text(rank, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(_profile["name"] ?? _profile["email"] ?? "", style: const TextStyle(color: Colors.white70, fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
           ]),
-          if (nextRank != null) ...[
-            const SizedBox(height: 16),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text("Progreso a \${nextRank['name']}", style: const TextStyle(color: Colors.white70, fontSize: 12)),
-              Text("$totalSold / ${nextRank['min']} vendidos", style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-            ]),
-            const SizedBox(height: 6),
-            ClipRRect(borderRadius: BorderRadius.circular(4),
-              child: LinearProgressIndicator(value: progress.clamp(0.0, 1.0), backgroundColor: Colors.white24,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white), minHeight: 8)),
-          ],
         ])),
-      const SizedBox(height: 16),
-      // Stats
-      Row(children: [
-        Expanded(child: _StatCard("Coins", "$balance", Icons.monetization_on, const Color(0xFF6C3DE0))),
-        const SizedBox(width: 12),
-        Expanded(child: _StatCard("Clientes", "$clientsCount", Icons.people, AdminTheme.cyan)),
-        const SizedBox(width: 12),
-        Expanded(child: _StatCard("Vendidos", "$totalSold", Icons.bar_chart, AdminTheme.green)),
-      ]),
+      const SizedBox(height: 14),
+      GridView.count(crossAxisCount: 2, shrinkWrap: true, physics: const NeverScrollableScrollPhysics(),
+        crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 1.8,
+        children: [
+          _StatCard("Activas", "${_profile["activos"] ?? 0}", Icons.check_circle_outline, AdminTheme.green),
+          _StatCard("Por Expirar", "${_profile["por_vencer"] ?? 0}", Icons.warning_amber_outlined, AdminTheme.gold),
+          _StatCard("Expiradas", "${_profile["vencidos"] ?? 0}", Icons.cancel_outlined, AdminTheme.red),
+          _StatCard("Revendedores", "${_profile["sub_resellers"] ?? 0}", Icons.group_outlined, const Color(0xFF6C3DE0)),
+        ]),
     ]));
   }
+
 
   @override
   Widget build(BuildContext context) => Scaffold(
