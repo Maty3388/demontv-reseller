@@ -85,6 +85,7 @@ class AdminApi {
 
   static Future<Map<String, dynamic>> deleteClient(String id) => _delete('/admin/clients/$id');
   static Future<Map<String, dynamic>> removeDevice(String id) => _delete('/admin/clients/$id/device');
+  static Future<Map<String, dynamic>> extendClient(String id, {int months = 1}) => _post('/admin/clients/$id/extend', {'months': months});
 
   static Future<Map<String, dynamic>> addMovie(String title, String category, String poster, String url) =>
     _post('/admin/movies', {'title': title, 'category': category, 'poster': poster, 'stream_url': url});
