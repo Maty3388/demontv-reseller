@@ -150,6 +150,28 @@ class _ClientsState extends State<ClientsScreen> {
       ])));
   }
 
+
+  void _showPasswordDialog(BuildContext ctx, String id, String email) {
+    final ctrl = TextEditingController();
+    bool show = false;
+    showDialog(context: ctx, builder: (c) => StatefulBuilder(builder: (c, ss) => AlertDialog(
+      backgroundColor: AdminTheme.surface,
+      title: Text("Cambiar contraseña: $email", style: const TextStyle(color: Colors.white, fontSize: 13)),
+      content: TextField(controller: ctrl, obscureText: !show,
+        style: const TextStyle(color: Colors.white, fontSize: 13),
+        decoration: InputDecoration(
+          hintText: "Nueva contraseña", hintStyle: const TextStyle(color: AdminTheme.textSecondary),
+          filled: true, fillColor: AdminTheme.surfaceAlt,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: BorderSide.none),
+          suffixIcon: IconButton(icon: Icon(show ? Icons.visibility_off : Icons.visibility, color: AdminTheme.textSecondary, size: 18),
+            onPressed: () => ss(() => show = !show)))),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
+        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black),
+          onPressed: () async { if (ctrl.text.isNotEmpty) { Navigator.pop(c); await AdminApi.updateClient(id, password: ctrl.text); _load(); } },
+          child: const Text("GUARDAR")),
+      ])));
+  }
   void _confirmDelete(BuildContext ctx, String id, String email) {
     showDialog(context: ctx, builder: (c) => AlertDialog(
       backgroundColor: AdminTheme.surface,
@@ -161,5 +183,18 @@ class _ClientsState extends State<ClientsScreen> {
           onPressed: () async { Navigator.pop(c); await AdminApi.deleteClient(id); _load(); },
           child: const Text("ELIMINAR")),
       ]));
-  }
+  
+}
+
+class _SmallBtn extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+  const _SmallBtn({required this.icon, required this.color, required this.onTap});
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: onTap,
+    child: Container(margin: const EdgeInsets.only(left: 4), padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(6)),
+      child: Icon(icon, color: color, size: 14)));
 }
