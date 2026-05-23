@@ -111,15 +111,16 @@ class _DashboardState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: const Color(0xFF0A0A0F),
-    appBar: AppBar(backgroundColor: AdminTheme.surface, elevation: 0,
+    appBar: AppBar(elevation: 0,
+      flexibleSpace: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFB03DE0), Color(0xFFE03D8F)], begin: Alignment.centerLeft, end: Alignment.centerRight))),
+      leading: Container(margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
+        child: const Center(child: Text("D+", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)))),
       centerTitle: true,
       title: const Text("Bienvenido al Panel\nDemonTv Revendedores", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-      actions: [
-        Container(margin: const EdgeInsets.only(right: 8),
-          width: 36, height: 36,
-          decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFE03D8F)], begin: Alignment.topLeft, end: Alignment.bottomRight), borderRadius: BorderRadius.circular(10)),
-          child: const Center(child: Text("D+", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)))),
-        IconButton(icon: const Icon(Icons.logout, color: AdminTheme.textSecondary), onPressed: _logout)]),
+      actions: [IconButton(icon: const Icon(Icons.logout, color: Colors.white70), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
       : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen(), const SubResellersScreen(), const ChatScreen()]),
     bottomNavigationBar: Container(
