@@ -21,7 +21,7 @@ class _DashboardState extends State<DashboardScreen> {
       {"icon": Icons.dashboard_outlined, "label": "Inicio"},
       {"icon": Icons.people_outline,     "label": "Clientes"},
     ];
-    if (rank != "Bronce") tabs.add({"icon": Icons.group_add_outlined, "label": "Revendedores"},
+    if (rank != "Bronce") tabs.add({"icon": Icons.group_add_outlined, "label": "Revendedores"});
       {"icon": Icons.chat_outlined, "label": "Chat"});
     return tabs;
   }

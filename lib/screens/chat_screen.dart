@@ -64,7 +64,7 @@ class _ChatState extends State<ChatScreen> {
     try {
       final t = DateTime.parse(iso).toLocal();
       return "${t.hour.toString().padLeft(2,'0')}:${t.minute.toString().padLeft(2,'0')}";
-    } catch { return ''; }
+    } catch (_) { return ''; }
   }
 
   @override
