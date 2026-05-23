@@ -1,4 +1,5 @@
 import 'sub_resellers_screen.dart';
+import 'chat_screen.dart';
 import "package:flutter/material.dart";
 import "../services/api.dart";
 import "../theme/theme.dart";
@@ -20,7 +21,8 @@ class _DashboardState extends State<DashboardScreen> {
       {"icon": Icons.dashboard_outlined, "label": "Inicio"},
       {"icon": Icons.people_outline,     "label": "Clientes"},
     ];
-    if (rank != "Bronce") tabs.add({"icon": Icons.group_add_outlined, "label": "Revendedores"});
+    if (rank != "Bronce") tabs.add({"icon": Icons.group_add_outlined, "label": "Revendedores"},
+      {"icon": Icons.chat_outlined, "label": "Chat"});
     return tabs;
   }
 
@@ -114,7 +116,7 @@ class _DashboardState extends State<DashboardScreen> {
       title: const Text("Bienvenido al Panel\nDemonTv Revendedores", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: AdminTheme.textSecondary), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
-      : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen(), const SubResellersScreen()]),
+      : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen(), const SubResellersScreen(), const ChatScreen()]),
     bottomNavigationBar: Container(
       decoration: BoxDecoration(color: AdminTheme.surface, border: Border(top: BorderSide(color: AdminTheme.border, width: 0.5))),
       child: SafeArea(child: Padding(padding: const EdgeInsets.symmetric(vertical: 8),

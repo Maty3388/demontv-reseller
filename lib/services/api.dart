@@ -7,6 +7,7 @@ class ResellerApi {
   static const String _base = 'http://149.104.92.205:25461';
   static String? _token;
 
+  static String? get token => _token;
   static Map<String, String> get _headers => {
     'Content-Type': 'application/json',
     if (_token != null) 'Authorization': 'Bearer $_token',
