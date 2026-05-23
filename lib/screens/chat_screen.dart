@@ -27,6 +27,11 @@ class _ChatState extends State<ChatScreen> {
       setState(() => _connected = true);
       _socket!.emit('auth', ResellerApi.token);
     });
+    _socket!.on('pinned', (data) {
+      if (data is Map) {
+        setState(() => _messages.insert(0, {...data, 'pinned': true}));
+      }
+    });
     _socket!.on('history', (data) {
       if (data is List) { setState(() => _messages.addAll(data.cast<Map>())); _scrollBottom(); }
     });
