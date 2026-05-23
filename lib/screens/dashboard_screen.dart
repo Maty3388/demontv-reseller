@@ -62,9 +62,9 @@ class _DashboardState extends State<DashboardScreen> {
       // Card principal
       Container(width: double.infinity, padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [_rankColor(rank), _rankColor(rank).withOpacity(0.6)], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          gradient: const LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFB03DE0), Color(0xFFE03D8F)], begin: Alignment.topLeft, end: Alignment.bottomRight),
           borderRadius: BorderRadius.circular(18),
-          boxShadow: [BoxShadow(color: _rankColor(rank).withOpacity(0.4), blurRadius: 16, offset: const Offset(0,4))]),
+          boxShadow: [BoxShadow(color: const Color(0xFF6C3DE0).withOpacity(0.5), blurRadius: 20, offset: const Offset(0, 6))]),
         child: Row(children: [
           Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Text("Saldo", style: TextStyle(color: Colors.white70, fontSize: 12, letterSpacing: 1)),
@@ -114,7 +114,12 @@ class _DashboardState extends State<DashboardScreen> {
     appBar: AppBar(backgroundColor: AdminTheme.surface, elevation: 0,
       centerTitle: true,
       title: const Text("Bienvenido al Panel\nDemonTv Revendedores", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
-      actions: [IconButton(icon: const Icon(Icons.logout, color: AdminTheme.textSecondary), onPressed: _logout)]),
+      actions: [
+        Container(margin: const EdgeInsets.only(right: 8),
+          width: 36, height: 36,
+          decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFE03D8F)], begin: Alignment.topLeft, end: Alignment.bottomRight), borderRadius: BorderRadius.circular(10)),
+          child: const Center(child: Text("D+", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)))),
+        IconButton(icon: const Icon(Icons.logout, color: AdminTheme.textSecondary), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
       : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen(), const SubResellersScreen(), const ChatScreen()]),
     bottomNavigationBar: Container(
