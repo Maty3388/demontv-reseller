@@ -1,3 +1,4 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../services/api.dart';
@@ -14,6 +15,7 @@ class _ChatState extends State<ChatScreen> {
   final _ctrl = TextEditingController();
   final _scroll = ScrollController();
   bool _connected = false;
+  bool _showEmoji = false;
 
   @override
   void initState() { super.initState(); _connect(); }
@@ -111,16 +113,32 @@ class _ChatState extends State<ChatScreen> {
     Container(padding: const EdgeInsets.fromLTRB(12,8,12,12), color: AdminTheme.surfaceAlt,
       child: Row(children: [
         Expanded(child: TextField(controller: _ctrl, style: const TextStyle(color: Colors.white, fontSize: 13),
+          onTap: () => setState(() => _showEmoji = false),
           onSubmitted: (_) => _send(),
           decoration: InputDecoration(hintText: 'Escribir mensaje...', hintStyle: const TextStyle(color: AdminTheme.textSecondary),
             filled: true, fillColor: AdminTheme.surface,
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10)))),
-        const SizedBox(width: 8),
+        const SizedBox(width: 6),
+        GestureDetector(onTap: () => setState(() => _showEmoji = !_showEmoji),
+          child: Container(width: 40, height: 40,
+            decoration: BoxDecoration(color: AdminTheme.surfaceAlt, shape: BoxShape.circle),
+            child: const Center(child: Text('😊', style: TextStyle(fontSize: 20))))),
+        const SizedBox(width: 6),
         GestureDetector(onTap: _send,
           child: Container(width: 40, height: 40,
             decoration: const BoxDecoration(color: AdminTheme.cyan, shape: BoxShape.circle),
             child: const Icon(Icons.send, color: Colors.black, size: 18))),
       ])),
+    if (_showEmoji) EmojiPicker(
+      onEmojiSelected: (cat, emoji) => setState(() => _ctrl.text += emoji.emoji),
+      config: const Config(
+        height: 250,
+        checkPlatformCompatibility: true,
+        emojiViewConfig: EmojiViewConfig(columns: 8, emojiSizeMax: 28),
+        categoryViewConfig: CategoryViewConfig(backgroundColor: Color(0xFF1C1C1E), iconColor: Colors.white38, iconColorSelected: Color(0xFF00E5FF), indicatorColor: Color(0xFF00E5FF)),
+        bottomActionBarConfig: BottomActionBarConfig(backgroundColor: Color(0xFF1C1C1E), buttonColor: Color(0xFF1C1C1E), buttonIconColor: Colors.white38),
+        searchViewConfig: SearchViewConfig(backgroundColor: Color(0xFF1C1C1E), buttonIconColor: Colors.white38),
+      )),
   ]);
 }
