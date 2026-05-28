@@ -1,3 +1,4 @@
+import 'notification_service.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -35,8 +36,20 @@ class ResellerApi {
       _token = data['token'];
       final p = await SharedPreferences.getInstance();
       await p.setString('reseller_token', _token!);
+      // Guardar FCM token
+      saveFcmToken().catchError((_) {});
     }
     return data;
+  }
+
+  static Future<void> saveFcmToken() async {
+    try {
+      final messaging = NotificationService.fcmToken;
+      if (messaging == null) return;
+      await http.post(Uri.parse('\$_base/reseller/fcm-token'),
+        headers: _headers..['Content-Type'] = 'application/json',
+        body: jsonEncode({'token': messaging}));
+    } catch (_) {}
   }
 
   static Future<Map<String, dynamic>> getProfile() async {
