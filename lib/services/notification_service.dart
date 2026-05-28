@@ -9,7 +9,12 @@ class NotificationService {
   static Future<void> init() async {
     await Firebase.initializeApp();
     final messaging = FirebaseMessaging.instance;
-    await messaging.requestPermission();
+    final settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    print('Permission: \${settings.authorizationStatus}');
     fcmToken = await messaging.getToken();
 
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
