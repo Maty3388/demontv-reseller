@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'services/api.dart';
+import 'services/notification_service.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'theme/theme.dart';
@@ -7,6 +8,7 @@ import 'theme/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ResellerApi.loadToken();
+  await NotificationService.init();
   runApp(const DemonTvResellerApp());
 }
 
