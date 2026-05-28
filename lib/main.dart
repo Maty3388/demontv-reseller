@@ -8,7 +8,7 @@ import 'theme/theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ResellerApi.loadToken();
-  await NotificationService.init();
+  try { await NotificationService.init(); } catch (_) {}
   runApp(const DemonTvResellerApp());
 }
 
