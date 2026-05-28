@@ -17,6 +17,10 @@ class NotificationService {
     print('Permission: \${settings.authorizationStatus}');
     fcmToken = await messaging.getToken();
 
+    // Pedir permiso explícito Android 13+
+    final plugin = _local.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    await plugin?.requestNotificationsPermission();
+    
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
     await _local.initialize(const InitializationSettings(android: android));
 
