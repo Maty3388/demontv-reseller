@@ -46,8 +46,8 @@ class ResellerApi {
     try {
       final messaging = NotificationService.fcmToken;
       if (messaging == null) return;
-      await http.post(Uri.parse('\$_base/reseller/fcm-token'),
-        headers: _headers..['Content-Type'] = 'application/json',
+      await http.post(Uri.parse('$_base/reseller/fcm-token'),
+        headers: _headers,
         body: jsonEncode({'token': messaging}));
     } catch (_) {}
   }
@@ -86,6 +86,16 @@ class ResellerApi {
 
   static Future<void> removeDevice(String id) async {
     await http.delete(Uri.parse('$_base/reseller/clients/$id/device'), headers: _headers);
+  }
+
+  static Future<Map<String, dynamic>> getClientDetail(String id) async {
+    final r = await http.get(Uri.parse('$_base/reseller/clients/$id'), headers: _headers);
+    return jsonDecode(r.body);
+  }
+
+  static Future<Map<String, dynamic>> getTransactions() async {
+    final r = await http.get(Uri.parse('$_base/reseller/transactions'), headers: _headers);
+    return jsonDecode(r.body);
   }
 
 }

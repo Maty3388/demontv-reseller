@@ -97,7 +97,7 @@ class _SubResellersState extends State<SubResellersScreen> {
             style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C3DE0), foregroundColor: Colors.white, padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
             onPressed: () {
               final rand = DateTime.now().millisecondsSinceEpoch.toString().substring(7);
-              ss(() { email.text = "res\$rand@demon.tv"; pass.text = "pass\$rand"; });
+              ss(() { email.text = "res$rand@demon.tv"; pass.text = "pass$rand"; });
             },
             child: const Text("🎲", style: TextStyle(fontSize: 16))),
         ]),
@@ -140,7 +140,7 @@ class _SubResellersState extends State<SubResellersScreen> {
               Navigator.pop(c);
               final r = await ResellerApi.createSubReseller(email.text.trim(), pass.text.trim(), name.text.trim(), selectedRank, balance);
               if (r["success"] == true) {
-                final text = "😈DemonPanel😈\n😈Vendedor Creado😈\n\nEmail: \${email.text.trim()}\nContraseña: \${pass.text.trim()}\nRango: \$selectedRank";
+                final text = "😈DemonPanel😈\n😈Vendedor Creado😈\n\nEmail: ${email.text.trim()}\nContraseña: ${pass.text.trim()}\nRango: $selectedRank";
                 await Clipboard.setData(ClipboardData(text: text));
                 if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("✅ Credenciales copiadas"), backgroundColor: AdminTheme.green));
                 _load();

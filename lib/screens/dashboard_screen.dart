@@ -1,5 +1,6 @@
 import 'sub_resellers_screen.dart';
 import 'chat_screen.dart';
+import 'historial_screen.dart';
 import "package:flutter/material.dart";
 import "../services/api.dart";
 import "../theme/theme.dart";
@@ -22,6 +23,7 @@ class _DashboardState extends State<DashboardScreen> {
       {"icon": Icons.people_outline,     "label": "Clientes"},
     ];
     if (rank != "Bronce") tabs.add({"icon": Icons.group_add_outlined, "label": "Revendedores"});
+    tabs.add({"icon": Icons.history_outlined, "label": "Historial"});
     tabs.add({"icon": Icons.chat_outlined, "label": "Chat"});
     return tabs;
   }
@@ -52,6 +54,15 @@ class _DashboardState extends State<DashboardScreen> {
       case "Diamante": return const Color(0xFF00CFDD);
       default: return const Color(0xFFCD7F32);
     }
+  }
+
+  List<Widget> _buildScreens() {
+    final rank = _profile["rank"] ?? "Bronce";
+    final screens = <Widget>[_buildHome(), const ClientsScreen()];
+    if (rank != "Bronce") screens.add(const SubResellersScreen());
+    screens.add(const HistorialScreen());
+    screens.add(const ChatScreen());
+    return screens;
   }
 
   Widget _buildHome() {
@@ -96,7 +107,7 @@ class _DashboardState extends State<DashboardScreen> {
       const SizedBox(height: 14),
       TextField(
         style: const TextStyle(color: Colors.white, fontSize: 13),
-        onChanged: (q) {},
+        onChanged: (q) { setState(() {}); },
         decoration: InputDecoration(
           hintText: "Buscar cliente...",
           hintStyle: const TextStyle(color: AdminTheme.textSecondary),
@@ -122,7 +133,7 @@ class _DashboardState extends State<DashboardScreen> {
       title: const Text("Bienvenido al Panel\nDemonTv Revendedores", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: Colors.white70), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
-      : IndexedStack(index: _tab, children: [_buildHome(), const ClientsScreen(), const SubResellersScreen(), const ChatScreen()]),
+      : IndexedStack(index: _tab, children: _buildScreens()),
     bottomNavigationBar: Container(
       decoration: BoxDecoration(color: AdminTheme.surface, border: Border(top: BorderSide(color: AdminTheme.border, width: 0.5))),
       child: SafeArea(child: Padding(padding: const EdgeInsets.symmetric(vertical: 8),

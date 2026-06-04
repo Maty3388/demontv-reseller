@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "../services/api.dart";
 import "../theme/theme.dart";
 
@@ -12,6 +13,7 @@ class _ClientsState extends State<ClientsScreen> {
   bool _loading = true;
   final _search = TextEditingController();
   List _filtered = [];
+  String _statusFilter = 'todos';
 
   @override void initState() { super.initState(); _load(); }
   @override void dispose() { _search.dispose(); super.dispose(); }
@@ -21,11 +23,23 @@ class _ClientsState extends State<ClientsScreen> {
     final r = await ResellerApi.getClients();
     if (!mounted) return;
     final clients = r["clients"] ?? [];
-    setState(() { _clients = clients; _filtered = clients; _loading = false; });
+    setState(() { _clients = clients; _loading = false; }); _applyFilter();
   }
 
-  void _filter(String q) {
-    setState(() => _filtered = q.isEmpty ? _clients : _clients.where((c) => (c["email"] ?? "").toLowerCase().contains(q.toLowerCase())).toList());
+  void _filter(String q) { _applyFilter(search: q); }
+
+  void _applyFilter({String? search}) {
+    final q = search ?? _search.text;
+    setState(() => _filtered = _clients.where((c) {
+      final matchSearch = q.isEmpty || (c["email"] ?? "").toLowerCase().contains(q.toLowerCase());
+      final days = c["daysLeft"] ?? -1;
+      final expired = c["isExpired"] == true;
+      final matchStatus = _statusFilter == 'todos' ||
+        (_statusFilter == 'activos' && !expired && days > 5) ||
+        (_statusFilter == 'por_vencer' && !expired && days <= 5) ||
+        (_statusFilter == 'vencidos' && expired);
+      return matchSearch && matchStatus;
+    }).toList());
   }
 
   String _getId(Map c) => (c["_id"] ?? c["id"] ?? "").toString().replaceAll("ObjectId(", "").replaceAll(")", "").replaceAll("'", "").trim();
@@ -51,6 +65,17 @@ class _ClientsState extends State<ClientsScreen> {
               style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.cyan, foregroundColor: Colors.black, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
               onPressed: () => _showAddDialog(context)),
           ])),
+        SingleChildScrollView(scrollDirection: Axis.horizontal, padding: const EdgeInsets.symmetric(horizontal: 14),
+          child: Row(children: [
+            _FilterChip('Todos', 'todos', _statusFilter, (v) { setState(() => _statusFilter = v); _applyFilter(); }),
+            const SizedBox(width: 8),
+            _FilterChip('Activos', 'activos', _statusFilter, (v) { setState(() => _statusFilter = v); _applyFilter(); }),
+            const SizedBox(width: 8),
+            _FilterChip('Por vencer', 'por_vencer', _statusFilter, (v) { setState(() => _statusFilter = v); _applyFilter(); }),
+            const SizedBox(width: 8),
+            _FilterChip('Vencidos', 'vencidos', _statusFilter, (v) { setState(() => _statusFilter = v); _applyFilter(); }),
+          ])),
+        const SizedBox(height: 8),
         Expanded(child: _filtered.isEmpty
           ? const Center(child: Text("No hay clientes", style: TextStyle(color: AdminTheme.textSecondary)))
           : GridView.builder(
@@ -74,7 +99,7 @@ class _ClientsState extends State<ClientsScreen> {
                       const SizedBox(width: 6),
                       Container(padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                         decoration: BoxDecoration(color: statusColor.withOpacity(0.15), borderRadius: BorderRadius.circular(6)),
-                        child: Text(expired ? "Vencido" : expiringSoon ? "\$days días" : "Activo",
+                        child: Text(expired ? "Vencido" : expiringSoon ? "$days días" : "Activo",
                           style: TextStyle(color: statusColor, fontSize: 9, fontWeight: FontWeight.bold))),
                     ]),
                     const SizedBox(height: 6),
@@ -83,9 +108,10 @@ class _ClientsState extends State<ClientsScreen> {
                     Text(c["subscription_end"] ?? "N/A", style: TextStyle(color: statusColor, fontSize: 10)),
                     const Spacer(),
                     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      _SmallBtn(icon: Icons.info_outline, color: const Color(0xFF6C3DE0), onTap: () => _showDetailDialog(ctx, id, c)),
                       _SmallBtn(icon: Icons.calendar_month, color: AdminTheme.cyan, onTap: () => _showRenewDialog(ctx, id, c["email"])),
-                        _SmallBtn(icon: Icons.edit, color: AdminTheme.gold, onTap: () => _showEditDialog(ctx, id, c["email"])),
-                        _SmallBtn(icon: Icons.phonelink_erase, color: AdminTheme.textSecondary, onTap: () => _removeDevice(ctx, id)),
+                      _SmallBtn(icon: Icons.edit, color: AdminTheme.gold, onTap: () => _showEditDialog(ctx, id, c["email"])),
+                      _SmallBtn(icon: Icons.phonelink_erase, color: AdminTheme.textSecondary, onTap: () => _removeDevice(ctx, id)),
                     ]),
                   ])));
               })),
@@ -144,6 +170,9 @@ class _ClientsState extends State<ClientsScreen> {
               Navigator.pop(c);
               final r = await ResellerApi.createClient(email.text.trim(), pass.text.trim(), isDemo ? 0 : months);
               if (r["success"] == true) {
+                final text = "😈DemonTV😈\nCliente Creado\n\nEmail: ${email.text.trim()}\nContraseña: ${pass.text.trim()}";
+                await Clipboard.setData(ClipboardData(text: text));
+                if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("✅ Credenciales copiadas"), backgroundColor: Color(0xFF4CAF50)));
                 _load();
               } else if (ctx.mounted) {
                 ScaffoldMessenger.of(ctx).showSnackBar(SnackBar(content: Text(r["error"] ?? "Error"), backgroundColor: AdminTheme.red));
@@ -154,6 +183,33 @@ class _ClientsState extends State<ClientsScreen> {
   }
 
 
+
+  void _showDetailDialog(BuildContext ctx, String id, Map client) {
+    showModalBottomSheet(context: ctx, backgroundColor: const Color(0xFF1E1E1E),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (_) => Padding(padding: const EdgeInsets.all(20), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          const Icon(Icons.person_outline, color: Color(0xFF6C3DE0), size: 20),
+          const SizedBox(width: 8),
+          const Text('Detalle del cliente', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+        ]),
+        const SizedBox(height: 16),
+        _DetailRow('Email', client['email'] ?? ''),
+        _DetailRow('Vencimiento', client['subscription_end'] ?? 'N/A'),
+        _DetailRow('Dias restantes', '${client['daysLeft'] ?? 0} días'),
+        _DetailRow('Estado', client['isExpired'] == true ? 'Vencido' : 'Activo'),
+        _DetailRow('Bloqueado', client['blocked'] == true ? 'Sí' : 'No'),
+        const SizedBox(height: 16),
+        SizedBox(width: double.infinity, child: ElevatedButton.icon(
+          icon: const Icon(Icons.content_copy, size: 16),
+          label: const Text('Copiar credenciales'),
+          style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C3DE0), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+          onPressed: () async {
+            await Clipboard.setData(ClipboardData(text: '😈DemonTV😈\nEmail: ${client['email']}\nApp: https://bit.ly/demontv'));
+            if (ctx.mounted) { Navigator.pop(ctx); ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('✅ Copiado'), backgroundColor: Color(0xFF4CAF50))); }
+          })),
+      ])));
+  }
 
   void _showEditDialog(BuildContext ctx, String id, String email) {
     final newEmail = TextEditingController(text: email);
@@ -253,4 +309,32 @@ class _DurBtn extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: selected ? AdminTheme.cyan : Colors.transparent)),
       child: Text(label, style: TextStyle(color: selected ? AdminTheme.cyan : AdminTheme.textSecondary, fontSize: 12, fontWeight: FontWeight.bold))));
+}
+class _FilterChip extends StatelessWidget {
+  final String label, value, selected;
+  final ValueChanged<String> onTap;
+  const _FilterChip(this.label, this.value, this.selected, this.onTap);
+  @override
+  Widget build(BuildContext context) => GestureDetector(
+    onTap: () => onTap(value),
+    child: Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: selected == value ? const Color(0xFF6C3DE0).withOpacity(0.2) : const Color(0xFF1E1E1E),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: selected == value ? const Color(0xFF6C3DE0) : Colors.transparent)),
+      child: Text(label, style: TextStyle(
+        color: selected == value ? const Color(0xFF6C3DE0) : const Color(0xFF9E9E9E),
+        fontSize: 12, fontWeight: FontWeight.w600))));
+}
+class _DetailRow extends StatelessWidget {
+  final String label, value;
+  const _DetailRow(this.label, this.value);
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 4),
+    child: Row(children: [
+      SizedBox(width: 120, child: Text(label, style: const TextStyle(color: Color(0xFF9E9E9E), fontSize: 13))),
+      Expanded(child: Text(value, style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500))),
+    ]));
 }
