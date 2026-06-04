@@ -1,13 +1,9 @@
 name: Build APK
 on:
   push:
-    branches: [ master, main ]
-    tags:
-      - 'v*'
+    branches: [master, main]
 permissions:
   contents: write
-
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
+          distribution: temurin
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
@@ -28,71 +24,36 @@ jobs:
           cp -r tmp_app/android .
           rm -rf tmp_app
           sed -i 's/minSdkVersion flutter.minSdkVersion/minSdkVersion 21/' android/app/build.gradle || true
+          sed -i 's/minSdkVersion 19/minSdkVersion 21/' android/app/build.gradle || true
+          sed -i "s/apply plugin: 'com.android.application'/apply plugin: 'com.android.application'\napply plugin: 'com.google.gms.google-services'/" android/app/build.gradle || true
+          sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.4.0'/" android/build.gradle || true
           sed -i 's|<manifest xmlns:android="http://schemas.android.com/apk/res/android">|<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>|' android/app/src/main/AndroidManifest.xml
-          sed -i "s/apply plugin: 'com.android.application'/apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'/" android/app/build.gradle || true
-          sed -i "s/dependencies {/dependencies {
-        classpath 'com.google.gms:google-services:4.4.0'/" android/build.gradle || true
           sed -i 's/signingConfig = signingConfigs.debug/signingConfig = signingConfigs.release/' android/app/build.gradle
-          sed -i '/buildTypes {/i\\    signingConfigs { release { def p=new Properties(); p.load(new FileInputStream(rootProject.file("key.properties"))); storeFile file(p["storeFile"]); storePassword p["storePassword"]; keyAlias p["keyAlias"]; keyPassword p["keyPassword"] } }' android/app/build.gradle
+          sed -i '/buildTypes {/i\    signingConfigs { release { def p=new Properties(); p.load(new FileInputStream(rootProject.file("key.properties"))); storeFile file(p["storeFile"]); storePassword p["storePassword"]; keyAlias p["keyAlias"]; keyPassword p["keyPassword"] } }' android/app/build.gradle
       - name: Add google-services.json
         run: echo "ewogICJwcm9qZWN0X2luZm8iOiB7CiAgICAicHJvamVjdF9udW1iZXIiOiAiMjk2NDI3OTYxNzYiLAogICAgInByb2plY3RfaWQiOiAiYXBwLXJldmVuZG9yZXMiLAogICAgInN0b3JhZ2VfYnVja2V0IjogImFwcC1yZXZlbmRvcmVzLmZpcmViYXNlc3RvcmFnZS5hcHAiCiAgfSwKICAiY2xpZW50IjogW10sCiAgImNvbmZpZ3VyYXRpb25fdmVyc2lvbiI6ICIxIgp9" | base64 -d > android/app/google-services.json
-      - name: Copy app icon
+      - name: Copy icons
         run: |
-          mkdir -p android/app/src/main/res/mipmap-mdpi android/app/src/main/res/mipmap-hdpi android/app/src/main/res/mipmap-xhdpi android/app/src/main/res/mipmap-xxhdpi android/app/src/main/res/mipmap-xxxhdpi
-          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do cp android_icons/mipmap-$d/ic_launcher.png android/app/src/main/res/mipmap-$d/ic_launcher.png 2>/dev/null || true; done
+          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            mkdir -p android/app/src/main/res/mipmap-$d
+            cp android_icons/mipmap-$d/ic_launcher.png android/app/src/main/res/mipmap-$d/ic_launcher.png 2>/dev/null || true
+          done
           rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
-      - name: Copy app icon
-        run: |
-          # Eliminar icono vectorial y usar PNG
-          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
-          rm -f android/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
-          # TV Banner
-          mkdir -p android/app/src/main/res/drawable
-          mkdir -p android/app/src/main/res/drawable-xhdpi
-          cp android_icons/banner.png android/app/src/main/res/drawable/banner.png
-          cp android_icons/banner_xhdpi.png android/app/src/main/res/drawable-xhdpi/banner.png
-          cp android_icons/mipmap-mdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-          cp android_icons/mipmap-mdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi/ic_launcher_round.png
-          cp android_icons/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-hdpi/ic_launcher_round.png
-          cp android_icons/mipmap-xhdpi/ic_launcher.png android/app/src/main/res/mipmap-xhdpi/ic_launcher_round.png
-          cp android_icons/mipmap-xxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.png
-          cp android_icons/mipmap-xxxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png
-          cp android_icons/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          cp android_icons/mipmap-xhdpi/ic_launcher.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-          cp android_icons/mipmap-xxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          cp android_icons/mipmap-xxxhdpi/ic_launcher.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-      - name: Set version
-        run: python3 -c "import re,subprocess; v=subprocess.check_output(['grep','version:','pubspec.yaml']).decode().split('+')[0].split()[-1]; c=open('lib/services/update_checker.dart').read(); c=re.sub(r\"static const _currentVersion = '[^']*'\",f\"static const _currentVersion = '{v}'\",c); open('lib/services/update_checker.dart','w').write(c)"
-      - run: flutter pub get
-      - name: Debug gradle
-        run: cat android/app/build.gradle | grep -A5 "buildTypes\|signingConfig"
       - name: Setup keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/demontv.keystore
           printf "storePassword=${{ secrets.KEYSTORE_PASSWORD }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nstoreFile=demontv.keystore\n" > android/key.properties
-      - name: Build APK
-        run: flutter build apk --release --no-tree-shake-icons
-        env:
-          KEYSTORE_PATH: android/app/demontv.keystore
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: demontv-plus-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
-      - name: Get app version
-        id: appversion
+      - run: flutter pub get
+      - run: flutter build apk --release --no-tree-shake-icons
+      - name: Get version
+        id: ver
         run: echo "VERSION=$(grep '^version:' pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)" >> $GITHUB_OUTPUT
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.appversion.outputs.VERSION }}
-          name: v${{ steps.appversion.outputs.VERSION }}
+          tag_name: v${{ steps.ver.outputs.VERSION }}
+          name: v${{ steps.ver.outputs.VERSION }}
           files: build/app/outputs/flutter-apk/app-release.apk
           generate_release_notes: false
-          draft: false
-          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
