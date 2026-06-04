@@ -34,7 +34,7 @@ apply plugin: 'com.google.gms.google-services'/" android/app/build.gradle || tru
           sed -i "s/dependencies {/dependencies {
         classpath 'com.google.gms:google-services:4.4.0'/" android/build.gradle || true
           sed -i 's/signingConfig = signingConfigs.debug/signingConfig = signingConfigs.release/' android/app/build.gradle
-          sed -i '/buildTypes {/i\    signingConfigs { release { def p=new Properties(); p.load(new FileInputStream(rootProject.file("key.properties"))); storeFile file(p["storeFile"]); storePassword p["storePassword"]; keyAlias p["keyAlias"]; keyPassword p["keyPassword"] } }' android/app/build.gradle
+          sed -i '/buildTypes {/i\\    signingConfigs { release { def p=new Properties(); p.load(new FileInputStream(rootProject.file("key.properties"))); storeFile file(p["storeFile"]); storePassword p["storePassword"]; keyAlias p["keyAlias"]; keyPassword p["keyPassword"] } }' android/app/build.gradle
       - name: Add google-services.json
         run: echo "ewogICJwcm9qZWN0X2luZm8iOiB7CiAgICAicHJvamVjdF9udW1iZXIiOiAiMjk2NDI3OTYxNzYiLAogICAgInByb2plY3RfaWQiOiAiYXBwLXJldmVuZG9yZXMiLAogICAgInN0b3JhZ2VfYnVja2V0IjogImFwcC1yZXZlbmRvcmVzLmZpcmViYXNlc3RvcmFnZS5hcHAiCiAgfSwKICAiY2xpZW50IjogW10sCiAgImNvbmZpZ3VyYXRpb25fdmVyc2lvbiI6ICIxIgp9" | base64 -d > android/app/google-services.json
       - name: Copy app icon
