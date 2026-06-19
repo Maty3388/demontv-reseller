@@ -168,7 +168,7 @@ class _ClientsState extends State<ClientsScreen> {
           onPressed: () async {
             if (email.text.isNotEmpty && pass.text.isNotEmpty) {
               Navigator.pop(c);
-              final r = await ResellerApi.createClient(email.text.trim(), pass.text.trim(), isDemo ? 0 : months);
+              final r = await ResellerApi.createClient(email.text.trim(), pass.text.trim(), isDemo ? 0 : months, isDemo: isDemo);
               if (r["success"] == true) {
                 final text = "😈DemonTV😈\nCliente Creado\n\nEmail: ${email.text.trim()}\nContraseña: ${pass.text.trim()}";
                 await Clipboard.setData(ClipboardData(text: text));
