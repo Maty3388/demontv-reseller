@@ -130,7 +130,7 @@ class _DashboardState extends State<DashboardScreen> {
         decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
         child: const Center(child: Text("D+", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)))),
       centerTitle: true,
-      title: const Text("Bienvenido al Panel\nDemonTv Revendedores", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
+      title: const Text("Bienvenido al Panel\nFluxTv Reseller", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: Colors.white70), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
       : IndexedStack(index: _tab, children: _buildScreens()),
