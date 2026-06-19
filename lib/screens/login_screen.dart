@@ -34,7 +34,7 @@ class _LoginState extends State<LoginScreen> {
           decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFE03D8F)], begin: Alignment.topLeft, end: Alignment.bottomRight), borderRadius: BorderRadius.circular(20)),
           child: const Center(child: Text('R+', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)))),
         const SizedBox(height: 16),
-        const Text('DemonTv Revendedor', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+        const Text('FluxTv Reseller', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
         const SizedBox(height: 6),
         const Text('Panel de Revendedor', style: TextStyle(color: AdminTheme.textSecondary, fontSize: 13)),
         const SizedBox(height: 36),
