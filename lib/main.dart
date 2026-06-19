@@ -9,14 +9,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ResellerApi.loadToken();
   try { await NotificationService.init(); } catch (_) {}
-  runApp(const DemonTvResellerApp());
+  runApp(const FluxTvResellerApp());
 }
 
-class DemonTvResellerApp extends StatelessWidget {
-  const DemonTvResellerApp({super.key});
+class FluxTvResellerApp extends StatelessWidget {
+  const FluxTvResellerApp({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: 'DemonTv Revendedor',
+    title: 'FluxTv Reseller',
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
       scaffoldBackgroundColor: AdminTheme.bg,
