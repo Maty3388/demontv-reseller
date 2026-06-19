@@ -170,7 +170,7 @@ class _ClientsState extends State<ClientsScreen> {
               Navigator.pop(c);
               final r = await ResellerApi.createClient(email.text.trim(), pass.text.trim(), isDemo ? 0 : months, isDemo: isDemo);
               if (r["success"] == true) {
-                final text = "😈DemonTV😈\nCliente Creado\n\nEmail: ${email.text.trim()}\nContraseña: ${pass.text.trim()}";
+                final text = "📺FluxTv📺\nCliente Creado\n\nEmail: ${email.text.trim()}\nContraseña: ${pass.text.trim()}";
                 await Clipboard.setData(ClipboardData(text: text));
                 if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("✅ Credenciales copiadas"), backgroundColor: Color(0xFF4CAF50)));
                 _load();
@@ -205,7 +205,7 @@ class _ClientsState extends State<ClientsScreen> {
           label: const Text('Copiar credenciales'),
           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF6C3DE0), foregroundColor: Colors.white, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
           onPressed: () async {
-            await Clipboard.setData(ClipboardData(text: '😈DemonTV😈\nEmail: ${client['email']}\nApp: https://bit.ly/demontv'));
+            await Clipboard.setData(ClipboardData(text: '📺FluxTv📺\nEmail: ${client['email']}\nApp: https://bit.ly/fluxtv'));
             if (ctx.mounted) { Navigator.pop(ctx); ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('✅ Copiado'), backgroundColor: Color(0xFF4CAF50))); }
           })),
       ])));
