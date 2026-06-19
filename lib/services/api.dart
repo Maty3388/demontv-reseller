@@ -62,9 +62,9 @@ class ResellerApi {
     return jsonDecode(r.body);
   }
 
-  static Future<Map<String, dynamic>> createClient(String email, String password, int months) async {
+  static Future<Map<String, dynamic>> createClient(String email, String password, int months, {bool isDemo = false}) async {
     final r = await http.post(Uri.parse('$_base/reseller/clients'),
-      headers: _headers, body: jsonEncode({'email': email, 'password': password, 'months': months}));
+      headers: _headers, body: jsonEncode({'email': email, 'password': password, 'months': months, 'isDemo': isDemo}));
     return jsonDecode(r.body);
   }
 
