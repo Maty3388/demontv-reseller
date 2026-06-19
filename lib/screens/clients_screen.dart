@@ -99,7 +99,7 @@ class _ClientsState extends State<ClientsScreen> {
                       const SizedBox(width: 6),
                       Container(padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                         decoration: BoxDecoration(color: statusColor.withOpacity(0.15), borderRadius: BorderRadius.circular(6)),
-                        child: Text(expired ? "Vencido" : expiringSoon ? "$days días" : "Activo",
+                        child: Text(expired ? "Vencido" : (c["isDemo"] == true) ? "$days h" : expiringSoon ? "$days días" : "Activo",
                           style: TextStyle(color: statusColor, fontSize: 9, fontWeight: FontWeight.bold))),
                     ]),
                     const SizedBox(height: 6),
