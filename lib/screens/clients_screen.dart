@@ -139,7 +139,7 @@ class _ClientsState extends State<ClientsScreen> {
             onPressed: () {
               final rand = DateTime.now().millisecondsSinceEpoch.toString().substring(7);
               ss(() {
-                email.text = "user$rand@demon.tv";
+                email.text = "user$rand@fluxtv.tv";
                 pass.text = "pass$rand";
               });
             },
