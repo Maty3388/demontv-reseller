@@ -128,7 +128,7 @@ class _DashboardState extends State<DashboardScreen> {
           gradient: LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFB03DE0), Color(0xFFE03D8F)], begin: Alignment.centerLeft, end: Alignment.centerRight))),
       leading: Container(margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), borderRadius: BorderRadius.circular(10)),
-        child: const Center(child: Text("D+", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)))),
+        child: const Center(child: Text("F", style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)))),
       centerTitle: true,
       title: const Text("Bienvenido al Panel\nFluxTv Reseller", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: Colors.white70), onPressed: _logout)]),
