@@ -197,7 +197,7 @@ class _ClientsState extends State<ClientsScreen> {
         const SizedBox(height: 16),
         _DetailRow('Email', client['email'] ?? ''),
         _DetailRow('Vencimiento', client['subscription_end'] ?? 'N/A'),
-        _DetailRow('Dias restantes', '${client['daysLeft'] ?? 0} días'),
+        _DetailRow('Dias restantes', client['isDemo'] == true ? '${client['daysLeft'] ?? 0} horas' : '${client['daysLeft'] ?? 0} días'),
         _DetailRow('Estado', client['isExpired'] == true ? 'Vencido' : 'Activo'),
         _DetailRow('Bloqueado', client['blocked'] == true ? 'Sí' : 'No'),
         const SizedBox(height: 16),
