@@ -28,6 +28,7 @@ jobs:
           sed -i "s/apply plugin: 'com.android.application'/apply plugin: 'com.android.application'\napply plugin: 'com.google.gms.google-services'/" android/app/build.gradle || true
           sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.4.0'/" android/build.gradle || true
           sed -i 's|<manifest xmlns:android="http://schemas.android.com/apk/res/android">|<manifest xmlns:android="http://schemas.android.com/apk/res/android"><uses-permission android:name="android.permission.INTERNET"/><uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>|' android/app/src/main/AndroidManifest.xml
+          sed -i 's/android:label="demontv_reseller"/android:label="FluxTv Reseller"/' android/app/src/main/AndroidManifest.xml || true
           sed -i 's/signingConfig = signingConfigs.debug/signingConfig = signingConfigs.release/' android/app/build.gradle
           sed -i '/buildTypes {/i\    signingConfigs { release { def p=new Properties(); p.load(new FileInputStream(rootProject.file("key.properties"))); storeFile file(p["storeFile"]); storePassword p["storePassword"]; keyAlias p["keyAlias"]; keyPassword p["keyPassword"] } }' android/app/build.gradle
       - name: Add google-services.json
