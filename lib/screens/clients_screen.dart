@@ -112,6 +112,7 @@ class _ClientsState extends State<ClientsScreen> {
                       _SmallBtn(icon: Icons.calendar_month, color: AdminTheme.cyan, onTap: () => _showRenewDialog(ctx, id, c["email"])),
                       _SmallBtn(icon: Icons.edit, color: AdminTheme.gold, onTap: () => _showEditDialog(ctx, id, c["email"])),
                       _SmallBtn(icon: Icons.phonelink_erase, color: AdminTheme.textSecondary, onTap: () => _removeDevice(ctx, id)),
+                      _SmallBtn(icon: Icons.delete_forever, color: AdminTheme.red, onTap: () => _deleteClient(ctx, id, c["email"] ?? "")),
                     ]),
                   ])));
               })),
@@ -237,6 +238,23 @@ class _ClientsState extends State<ClientsScreen> {
             _load();
           }, child: const Text("GUARDAR")),
       ]));
+  }
+
+  Future<void> _deleteClient(BuildContext ctx, String id, String email) async {
+    final confirm = await showDialog<bool>(context: ctx, builder: (c) => AlertDialog(
+      backgroundColor: AdminTheme.surface,
+      title: const Text("Eliminar cliente", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+      content: Text("¿Eliminar la cuenta de $email? Esta acción no se puede deshacer.", style: const TextStyle(color: AdminTheme.textSecondary, fontSize: 13)),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(c, false), child: const Text("Cancelar", style: TextStyle(color: AdminTheme.textSecondary))),
+        ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: AdminTheme.red, foregroundColor: Colors.white),
+          onPressed: () => Navigator.pop(c, true), child: const Text("ELIMINAR")),
+      ]));
+    if (confirm == true) {
+      await ResellerApi.deleteClient(id);
+      if (ctx.mounted) ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text("Cliente eliminado"), backgroundColor: AdminTheme.red));
+      _load();
+    }
   }
 
   Future<void> _removeDevice(BuildContext ctx, String id) async {
