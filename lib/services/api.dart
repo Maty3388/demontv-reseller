@@ -84,6 +84,11 @@ class ResellerApi {
     return jsonDecode(r.body);
   }
 
+  static Future<Map<String, dynamic>> deleteClient(String id) async {
+    final r = await http.delete(Uri.parse('$_base/reseller/clients/$id'), headers: _headers);
+    return jsonDecode(r.body);
+  }
+
   static Future<void> removeDevice(String id) async {
     await http.delete(Uri.parse('$_base/reseller/clients/$id/device'), headers: _headers);
   }
