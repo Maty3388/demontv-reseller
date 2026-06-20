@@ -87,7 +87,8 @@ class _ClientsState extends State<ClientsScreen> {
                 final id = _getId(c);
                 final days = c["daysLeft"] ?? -1;
                 final expired = c["isExpired"] == true;
-                final expiringSoon = !expired && days <= 5;
+                final isDemo = c["isDemo"] == true;
+        final expiringSoon = !expired && !isDemo && days <= 5;
                 final statusColor = expired ? AdminTheme.red : expiringSoon ? AdminTheme.gold : AdminTheme.green;
                 return Container(
                   decoration: BoxDecoration(color: AdminTheme.surface, borderRadius: BorderRadius.circular(12),
@@ -105,7 +106,11 @@ class _ClientsState extends State<ClientsScreen> {
                     const SizedBox(height: 6),
                     Text(c["email"] ?? "", style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600), maxLines: 1, overflow: TextOverflow.ellipsis),
                     const SizedBox(height: 2),
-                    Text(c["subscription_end"] ?? "N/A", style: TextStyle(color: statusColor, fontSize: 10)),
+                    Text(
+            c["isDemo"] == true
+              ? (() { try { final d = DateTime.parse(c["subscription_end"]); return "\${d.hour.toString().padLeft(2,'0')}:\${d.minute.toString().padLeft(2,'0')} hs"; } catch(_) { return c["subscription_end"] ?? "N/A"; } })()
+              : c["subscription_end"] ?? "N/A",
+            style: TextStyle(color: statusColor, fontSize: 10)),
                     const Spacer(),
                     Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                       _SmallBtn(icon: Icons.info_outline, color: const Color(0xFF6C3DE0), onTap: () => _showDetailDialog(ctx, id, c)),
