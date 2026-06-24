@@ -108,7 +108,7 @@ class _ClientsState extends State<ClientsScreen> {
                     const SizedBox(height: 2),
                     Text(
             c["isDemo"] == true
-              ? (() { try { final d = DateTime.parse(c["subscription_end"]); return "\${d.hour.toString().padLeft(2,'0')}:\${d.minute.toString().padLeft(2,'0')} hs"; } catch(_) { return c["subscription_end"] ?? "N/A"; } })()
+              ? (() { try { final d = DateTime.parse(c["subscription_end"]); return "${d.hour.toString().padLeft(2,'0')}:${d.minute.toString().padLeft(2,'0')} hs"; } catch(_) { return c["subscription_end"] ?? "N/A"; } })()
               : c["subscription_end"] ?? "N/A",
             style: TextStyle(color: statusColor, fontSize: 10)),
                     const Spacer(),
