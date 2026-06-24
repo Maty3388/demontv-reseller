@@ -138,7 +138,7 @@ class _DashboardState extends State<DashboardScreen> {
       title: const Text("Bienvenido al Panel\nFluxTv Reseller", textAlign: TextAlign.center, style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold)),
       actions: [IconButton(icon: const Icon(Icons.logout, color: Colors.white70), onPressed: _logout)]),
     body: _loading ? const Center(child: CircularProgressIndicator(color: AdminTheme.cyan))
-      : IndexedStack(index: _tab, children: _buildScreens()),
+      : KeyedSubtree(key: ValueKey(_tab), child: _buildScreens()[_tab]),
     bottomNavigationBar: Container(
       decoration: BoxDecoration(color: AdminTheme.surface, border: Border(top: BorderSide(color: AdminTheme.border, width: 0.5))),
       child: SafeArea(child: Padding(padding: const EdgeInsets.symmetric(vertical: 8),
@@ -146,7 +146,7 @@ class _DashboardState extends State<DashboardScreen> {
           children: List.generate(_tabs.length, (i) {
             final t = _tabs[i];
             final sel = _tab == i;
-            return GestureDetector(onTap: () => setState(() => _tab = i),
+            return GestureDetector(onTap: () { setState(() => _tab = i); },
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Icon(t["icon"] as IconData, color: sel ? AdminTheme.cyan : AdminTheme.textSecondary, size: 24),
                 const SizedBox(height: 4),
