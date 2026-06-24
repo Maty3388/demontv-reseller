@@ -120,7 +120,12 @@ class _DashboardState extends State<DashboardScreen> {
 
 
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) => PopScope(
+    canPop: false,
+    onPopInvoked: (didPop) async {
+      if (_tab != 0) { setState(() => _tab = 0); return; }
+    },
+    child: Scaffold(
     backgroundColor: const Color(0xFF0A0A0F),
     appBar: AppBar(elevation: 0,
       flexibleSpace: Container(
@@ -148,7 +153,7 @@ class _DashboardState extends State<DashboardScreen> {
                 Text(t["label"] as String, style: TextStyle(color: sel ? AdminTheme.cyan : AdminTheme.textSecondary, fontSize: 11, fontWeight: sel ? FontWeight.bold : FontWeight.normal)),
               ]));
           }))))),
-  );
+    ));
 }
 
 class _StatCard extends StatelessWidget {
