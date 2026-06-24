@@ -30,10 +30,7 @@ class _LoginState extends State<LoginScreen> {
     backgroundColor: AdminTheme.bg,
     body: Center(child: SingleChildScrollView(child: Padding(padding: const EdgeInsets.all(32),
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Container(width: 80, height: 80,
-          decoration: BoxDecoration(gradient: const LinearGradient(colors: [Color(0xFF6C3DE0), Color(0xFFE03D8F)], begin: Alignment.topLeft, end: Alignment.bottomRight), borderRadius: BorderRadius.circular(20)),
-          child: const Center(child: Text('R+', style: TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.bold)))),
-        const SizedBox(height: 16),
+        ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.network('https://raw.githubusercontent.com/Maty3388/demontv-reseller/master/assets/logo.png', width: 80, height: 80, fit: BoxFit.cover)),
         const Text('FluxTv Reseller', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
         const SizedBox(height: 6),
         const Text('Panel de Revendedor', style: TextStyle(color: AdminTheme.textSecondary, fontSize: 13)),
