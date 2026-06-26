@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ResellerApi {
-  static const String _base = 'http://149.104.92.205:25461';
+  static const String _base = 'http://31.40.212.209:25461';
   static String? _token;
 
   static String? get token => _token;
