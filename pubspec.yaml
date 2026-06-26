@@ -1,6 +1,6 @@
 name: fluxtv_reseller
 description: FluxTv Reseller - Panel Revendedor
-version: 1.0.2+3
+version: 1.0.3+4
 publish_to: 'none'
 
 environment:
